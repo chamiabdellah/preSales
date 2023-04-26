@@ -8,11 +8,12 @@ class ArticleList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListView(
-        children: <Widget>[
-          ListTile(
-            leading: Image.network(article.picture, fit: BoxFit.scaleDown, width: 1,),
+    return SizedBox(
+      height: 80,
+      child : Card(
+      elevation: 5,
+      child: ListTile(
+            leading: Image.network(article.picture, fit: BoxFit.scaleDown, width: 100,),
             title: Text(article.name),
             subtitle: Text(article.articleCode),
             trailing: const Icon(Icons.delete),
@@ -20,7 +21,6 @@ class ArticleList extends StatelessWidget {
               // Navigate to article 1
             },
           ),
-        ],
       ),
     );
   }

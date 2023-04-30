@@ -3,6 +3,7 @@
 import 'dart:core';
 
 class Article {
+  String id;
   String name;
   double quantity;
   String picture;
@@ -11,6 +12,7 @@ class Article {
   String articleCode;
 
   Article({
+    this.id = "",
     required this.name,
     this.quantity = 0.0,
     this.picture = "",

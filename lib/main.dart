@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proj1/screens/addArticleScreen.dart';
 import 'package:proj1/screens/listOfArticles.dart';
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Liste des articles'),
     );
   }
 }
@@ -44,10 +45,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-
+        actions: [
+          InkWell(
+            onTap: () { 
+              Navigator.push(context, MaterialPageRoute(builder: (ctx) => const AddArticleScreen()));
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 20.0),
+                child : Icon(
+                  size: 35,
+                Icons.add,  // add custom icons also
+              ),
+            ),
+          ),
+        ],
         title: Text(widget.title),
       ),
-      body: ListOfArticles(),
+      body: const ListOfArticles(),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',

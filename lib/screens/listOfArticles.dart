@@ -5,6 +5,8 @@ import 'package:proj1/models/Article.dart';
 import 'package:proj1/widgets/ArticleList.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/Paths.dart';
+
 class ListOfArticles extends StatefulWidget{
   const ListOfArticles({super.key});
 
@@ -17,7 +19,7 @@ class _ListOfArticlesState extends State<ListOfArticles> {
   List<Article> listOfArticle = [];
 
   Future<void> fetchArticles() async {
-    String link = "https://amlogpresales-default-rtdb.europe-west1.firebasedatabase.app/Articles.json";
+    String link = Paths.articlePath ;
     Uri uri = Uri.parse(link);
     final response = await http.get(uri);
 

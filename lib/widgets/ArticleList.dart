@@ -13,7 +13,7 @@ class ArticleList extends StatelessWidget {
       child : Card(
       elevation: 5,
       child: ListTile(
-            leading: Image.network(article.picture, fit: BoxFit.scaleDown, width: 100,),
+            leading: SizedBox(width: 100,child: Image.network(article.picture, fit: BoxFit.scaleDown, width: 100,),),
             title: Text(article.name),
             subtitle: Text(article.articleCode),
             trailing: const Icon(Icons.delete),

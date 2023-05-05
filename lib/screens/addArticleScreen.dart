@@ -11,7 +11,13 @@ class AddArticleScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Ajouter un article"),
       ),
-      body: const AddArticleForm(),
+      body: Column(
+        children:  const [
+          Flexible(
+            child: AddArticleForm(),
+          ),
+        ],
+      ),
     );
   }
 }

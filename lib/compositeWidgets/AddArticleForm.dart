@@ -8,6 +8,7 @@ import 'package:proj1/models/Article.dart';
 import 'package:proj1/utils/ValidationLib.dart';
 import 'package:proj1/widgets/OutlineTextField.dart';
 import 'package:http/http.dart' as http;
+//import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 import '../providers/list_of_articles_provider.dart';
 import '../utils/Paths.dart';
@@ -39,7 +40,7 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
 
   File? _articleImage;
 
-  void setArticleImage(File imageFile){
+  void setArticleImage(File imageFile) {
     setState(() {
       _articleImage = imageFile;
     });
@@ -162,8 +163,26 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
     // 4.2 - the quantity is negative [DONE]
   }
 
+  void readBarCode() async {
+   /* var res = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SimpleBarcodeScannerPage(),
+        ));
+
+      if (res is String) {
+        setState(() {
+          articleCodeController!.text = res;
+        });
+      }*/
+
+  }
+
   Future<String> uploadImage() async {
-    Reference storageRef = FirebaseStorage.instance.ref().child('article_images').child('test.jpeg');
+    Reference storageRef = FirebaseStorage.instance
+        .ref()
+        .child('article_images')
+        .child('test.jpeg');
     await storageRef.putFile(_articleImage!);
 
     return storageRef.getDownloadURL();
@@ -211,11 +230,25 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
             ],
           ),
           const SizedBox(height: columnSpace),
-          OutlineTextField(
-            labelText: 'code article',
-            validationFunc: ValidationLib.nonEmptyField,
-            controller: articleCodeController,
-            isEnabled: isAddMode,
+          Row(
+            children: [
+              Flexible(
+                flex: 12,
+                child: OutlineTextField(
+                  labelText: 'code article',
+                  validationFunc: ValidationLib.nonEmptyField,
+                  controller: articleCodeController,
+                  isEnabled: false,
+                ),
+              ),
+              Flexible(
+                flex: 2,
+                child: IconButton(
+                  onPressed: isAddMode ? readBarCode : null,
+                  icon: const Icon(Icons.barcode_reader, size: 40),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: columnSpace),
           Builder(builder: (BuildContext context) {
@@ -231,11 +264,9 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
             textInputType: TextInputType.number,
             controller: articlePriceController,
           ),
-          Row(
-            children: [
-              PickImageCamera(onPick: setArticleImage,),
-              //PickImageFile(),
-            ],
+          PickImageCamera(
+            onPick: setArticleImage,
+            link: isAddMode ? null : widget.baseArticle!.picture,
           ),
           Flexible(
             flex: 1,

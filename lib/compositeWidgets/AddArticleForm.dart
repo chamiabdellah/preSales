@@ -9,9 +9,11 @@ import 'package:http/http.dart' as http;
 
 import '../providers/list_of_articles_provider.dart';
 import '../utils/Paths.dart';
+import '../widgets/PickImageCamera.dart';
 
 class AddArticleForm extends ConsumerStatefulWidget {
-  const AddArticleForm({Key? key, required this.scaffoldKey, this.baseArticle}) : super(key: key);
+  const AddArticleForm({Key? key, required this.scaffoldKey, this.baseArticle})
+      : super(key: key);
 
   final GlobalKey<ScaffoldState> scaffoldKey;
   final Article? baseArticle;
@@ -21,7 +23,6 @@ class AddArticleForm extends ConsumerStatefulWidget {
 }
 
 class _AddArticleFormState extends ConsumerState<AddArticleForm> {
-
   final _productFormKey = GlobalKey<FormState>();
 
   TextEditingController? articleNameController = TextEditingController();
@@ -36,9 +37,8 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
 
   @override
   void initState() {
-    
     super.initState();
-    if(widget.baseArticle != null){
+    if (widget.baseArticle != null) {
       isAddMode = false;
       articleNameController!.text = widget.baseArticle!.name;
       articleQuantityController!.text = widget.baseArticle!.quantity.toString();
@@ -50,80 +50,87 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
   }
 
   void addToDataBase() async {
-    if(_productFormKey.currentState == null){
+    if (_productFormKey.currentState == null) {
       return;
     }
 
     // 1- validate the fields.
-    if(_productFormKey.currentState!.validate()){
+    if (_productFormKey.currentState!.validate()) {
       final String articleCode = articleCodeController!.value.text;
       final isNewCodeI = await ValidationLib.isNewArticleCode(articleCode);
       setState(() {
         isNewCode = isNewCodeI;
       });
 
-      if(!isNewCode! && isAddMode){
+      if (!isNewCode! && isAddMode) {
         return;
       }
       final Uri url;
-      if(isAddMode){
+      if (isAddMode) {
         url = Uri.parse(Paths.articlePath);
       } else {
-        Article article = ref.read(listOfArticlesProvider.notifier).getArticleByCode(articleCode);
+        Article article = ref
+            .read(listOfArticlesProvider.notifier)
+            .getArticleByCode(articleCode);
         url = Uri.parse(Paths.getArticlePathWithId(article.id));
       }
       // 2- read the values from the fields => will be done using the controllers
-      Map<String,dynamic> requestBody = {
-        'articleCode' : articleCode,
-        'articleName' : articleNameController!.value.text,
-        'image' : articleImageController!.value.text,
-        'price' : double.parse(articlePriceController!.value.text),
-        'quantity' : double.parse(articleQuantityController!.value.text),
-        'unit' : articleUnitController!.value.text,
+      Map<String, dynamic> requestBody = {
+        'articleCode': articleCode,
+        'articleName': articleNameController!.value.text,
+        'image': articleImageController!.value.text,
+        'price': double.parse(articlePriceController!.value.text),
+        'quantity': double.parse(articleQuantityController!.value.text),
+        'unit': articleUnitController!.value.text,
       };
 
       // 3 - send the request to the db
       final http.Response response;
-      if(isAddMode){
+      if (isAddMode) {
         response = await http.post(url, body: json.encode(requestBody));
       } else {
         response = await http.patch(url, body: json.encode(requestBody));
       }
 
       // 4 - get the save status :
-      if(response.statusCode == 200){
-
+      if (response.statusCode == 200) {
         // 5 - on success show a snack bar
 
-        ScaffoldMessenger.of(widget.scaffoldKey.currentState!.context).clearSnackBars();
+        ScaffoldMessenger.of(widget.scaffoldKey.currentState!.context)
+            .clearSnackBars();
         //ScaffoldMessenger.of(context).clearSnackBars();
         final snackBar = SnackBar(
           duration: const Duration(seconds: 10),
-          content: isAddMode ?
-          Text('L\'article ${articleNameController!.value.text} a été ajouté avec succès')
-          : Text('L\'article ${articleNameController!.value.text} a été modifié avec succès'),
+          content: isAddMode
+              ? Text(
+                  'L\'article ${articleNameController!.value.text} a été ajouté avec succès')
+              : Text(
+                  'L\'article ${articleNameController!.value.text} a été modifié avec succès'),
         );
-        ScaffoldMessenger.of(widget.scaffoldKey.currentState!.context).showSnackBar(snackBar);
+        ScaffoldMessenger.of(widget.scaffoldKey.currentState!.context)
+            .showSnackBar(snackBar);
         Navigator.of(widget.scaffoldKey.currentState!.context).pop();
 
-        final extractedData = json.decode(response.body) as Map<String, dynamic>;
+        final extractedData =
+            json.decode(response.body) as Map<String, dynamic>;
 
         final article = Article(
-            articleCode : articleCode,
-            name : articleNameController!.value.text,
-            picture : articleImageController!.value.text,
-            price : double.parse(articlePriceController!.value.text),
-            quantity: double.parse(articleQuantityController!.value.text),
-            unit : articleUnitController!.value.text,
-            id: isAddMode ? extractedData['name'] : widget.baseArticle!.id,
+          articleCode: articleCode,
+          name: articleNameController!.value.text,
+          picture: articleImageController!.value.text,
+          price: double.parse(articlePriceController!.value.text),
+          quantity: double.parse(articleQuantityController!.value.text),
+          unit: articleUnitController!.value.text,
+          id: isAddMode ? extractedData['name'] : widget.baseArticle!.id,
         );
 
-        if(isAddMode){
+        if (isAddMode) {
           ref.read(listOfArticlesProvider.notifier).addArticle(article);
         } else {
-          ref.read(listOfArticlesProvider.notifier).modifyArticle(article, articleCode);
+          ref
+              .read(listOfArticlesProvider.notifier)
+              .modifyArticle(article, articleCode);
         }
-
 
         // 6 - clear the content of hte form
         articleNameController?.clear();
@@ -135,8 +142,8 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
       }
     }
     // 4 - treat the exceptions.
-      // 4.1 - the product exists already in the db => add the condition to the validation of the code
-      // 4.2 - the quantity is negative [DONE]
+    // 4.1 - the product exists already in the db => add the condition to the validation of the code
+    // 4.2 - the quantity is negative [DONE]
   }
 
   @override
@@ -188,8 +195,8 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
             isEnabled: isAddMode,
           ),
           const SizedBox(height: columnSpace),
-          Builder(builder: (BuildContext context){
-            if(!isNewCode! && isAddMode){
+          Builder(builder: (BuildContext context) {
+            if (!isNewCode! && isAddMode) {
               return const Text("Ce code est déjà utilisé");
             }
             return const SizedBox.shrink();
@@ -201,7 +208,12 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
             textInputType: TextInputType.number,
             controller: articlePriceController,
           ),
-          //ImagePicker(),
+          Row(
+            children: const [
+              PickImageCamera(),
+              //PickImageFile(),
+            ],
+          ),
           Flexible(
             flex: 1,
             child: Padding(
@@ -211,9 +223,10 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
                 height: 60,
                 child: ElevatedButton(
                   onPressed: addToDataBase,
-                  child:  Text(
+                  child: Text(
                     isAddMode ? "Ajouter" : "Modifier",
-                    style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

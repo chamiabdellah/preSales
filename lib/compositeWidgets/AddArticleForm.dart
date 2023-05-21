@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/Article.dart';
@@ -35,6 +37,14 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
   bool? isNewCode = true;
   bool isAddMode = true;
 
+  File? _articleImage;
+
+  void setArticleImage(File imageFile){
+    setState(() {
+      _articleImage = imageFile;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -50,7 +60,7 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
   }
 
   void addToDataBase() async {
-    if (_productFormKey.currentState == null) {
+    if (_productFormKey.currentState == null || _articleImage == null) {
       return;
     }
 
@@ -65,6 +75,10 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
       if (!isNewCode! && isAddMode) {
         return;
       }
+
+      // upload the image to the firestore
+      String imagePath = await uploadImage();
+
       final Uri url;
       if (isAddMode) {
         url = Uri.parse(Paths.articlePath);
@@ -78,7 +92,8 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
       Map<String, dynamic> requestBody = {
         'articleCode': articleCode,
         'articleName': articleNameController!.value.text,
-        'image': articleImageController!.value.text,
+        //'image': articleImageController!.value.text,
+        'image': imagePath,
         'price': double.parse(articlePriceController!.value.text),
         'quantity': double.parse(articleQuantityController!.value.text),
         'unit': articleUnitController!.value.text,
@@ -117,7 +132,8 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
         final article = Article(
           articleCode: articleCode,
           name: articleNameController!.value.text,
-          picture: articleImageController!.value.text,
+          //picture: articleImageController!.value.text,
+          picture: imagePath,
           price: double.parse(articlePriceController!.value.text),
           quantity: double.parse(articleQuantityController!.value.text),
           unit: articleUnitController!.value.text,
@@ -144,6 +160,13 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
     // 4 - treat the exceptions.
     // 4.1 - the product exists already in the db => add the condition to the validation of the code
     // 4.2 - the quantity is negative [DONE]
+  }
+
+  Future<String> uploadImage() async {
+    Reference storageRef = FirebaseStorage.instance.ref().child('article_images').child('test.jpeg');
+    await storageRef.putFile(_articleImage!);
+
+    return storageRef.getDownloadURL();
   }
 
   @override
@@ -209,8 +232,8 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
             controller: articlePriceController,
           ),
           Row(
-            children: const [
-              PickImageCamera(),
+            children: [
+              PickImageCamera(onPick: setArticleImage,),
               //PickImageFile(),
             ],
           ),

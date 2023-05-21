@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>694428762149-qjp87hft08v9jb6n7536hs8cd5rmucfe.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.694428762149-qjp87hft08v9jb6n7536hs8cd5rmucfe</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBllGFJ6mfUUKseFHUnjSfPKh-H5sNEceg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>694428762149</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.proj1</string>
+	<key>PROJECT_ID</key>
+	<string>amlogpresales</string>
+	<key>STORAGE_BUCKET</key>
+	<string>amlogpresales.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:694428762149:ios:d90c9497627a20f3e17fcc</string>
+	<key>DATABASE_URL</key>
+	<string>https://amlogpresales-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>

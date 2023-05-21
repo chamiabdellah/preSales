@@ -8,7 +8,8 @@ class OutlineTextField extends StatefulWidget {
     required this.validationFunc,
     this.textInputType = TextInputType.text,
     this.controller,
-    this.onSaved}) : super(key: key);
+    this.onSaved,
+    this.isEnabled = true}) : super(key: key);
 
 
   final String labelText;
@@ -16,6 +17,8 @@ class OutlineTextField extends StatefulWidget {
   final TextInputType textInputType;
   final TextEditingController? controller;
   final void Function(String?)? onSaved;
+  final bool isEnabled;
+
 
   @override
   State<OutlineTextField> createState() => _OutlineTextFieldState();
@@ -28,7 +31,8 @@ class _OutlineTextFieldState extends State<OutlineTextField> {
       keyboardType: widget.textInputType,
       decoration: InputDecoration(
         labelText: widget.labelText,
-        border: const OutlineInputBorder(),
+        border: const UnderlineInputBorder(),
+        enabled: widget.isEnabled,
       ),
       validator: widget.validationFunc,
       controller: widget.controller,

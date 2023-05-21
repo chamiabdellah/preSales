@@ -20,7 +20,9 @@ class ValidationLib{
       return 'Quantite invalide';
     }
     double? num = double.tryParse(value);
-    if(num! < 0){
+    if(num == null){
+      return 'Quantite invalide';
+    } else if(num < 0){
       return 'Entrez une valeur positive';
     }
     return null;

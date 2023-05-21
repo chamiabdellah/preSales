@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:proj1/screens/addArticleScreen.dart';
-import 'package:proj1/screens/listOfArticles.dart';
+import 'package:proj1/screens/listOfArticlesScreen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'PreSales App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -32,13 +33,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: const ListOfArticles(),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: (){},
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),

@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/Article.dart';
 import 'package:proj1/utils/ValidationLib.dart';
@@ -164,25 +166,30 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
   }
 
   void readBarCode() async {
-   /* var res = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SimpleBarcodeScannerPage(),
-        ));
+    String barcodeScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          '#0000ff', 'Annuler', true, ScanMode.DEFAULT);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
 
-      if (res is String) {
-        setState(() {
-          articleCodeController!.text = res;
-        });
-      }*/
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
 
+    setState(() {
+      articleCodeController!.text = barcodeScanRes;
+    });
   }
 
   Future<String> uploadImage() async {
     Reference storageRef = FirebaseStorage.instance
         .ref()
         .child('article_images')
-        .child('test.jpeg');
+        .child('${articleCodeController!.value.text}${articleNameController!.value.text}.jpeg');
     await storageRef.putFile(_articleImage!);
 
     return storageRef.getDownloadURL();
@@ -238,7 +245,7 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
                   labelText: 'code article',
                   validationFunc: ValidationLib.nonEmptyField,
                   controller: articleCodeController,
-                  isEnabled: false,
+                  isEnabled: isAddMode,
                 ),
               ),
               Flexible(

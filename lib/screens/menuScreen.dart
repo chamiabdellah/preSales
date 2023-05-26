@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proj1/screens/listOfCustomersScreen.dart';
 
 import '../widgets/menuItem.dart';
 import 'listOfArticlesScreen.dart';
@@ -21,7 +22,7 @@ class MenuScreen extends StatelessWidget {
           ),
           MenuItem(
             title : "Gérer les Clients",
-            toScreen : ListOfArticles(),
+            toScreen : ListOfCustomersScreen(),
             color : Colors.lime,
           ),
           MenuItem(
@@ -30,9 +31,14 @@ class MenuScreen extends StatelessWidget {
             color : Colors.greenAccent,
           ),
           MenuItem(
-            title : "Livrer une commande",
+            title : "Confirmer une commande",
             toScreen : ListOfArticles(),
             color : Colors.redAccent,
+          ),
+          MenuItem(
+            title : "Livrer une commande",
+            toScreen : ListOfArticles(),
+            color : Colors.black26,
           ),
         ],
       ),

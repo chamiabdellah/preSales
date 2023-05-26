@@ -111,7 +111,7 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
       }
 
       // 4 - get the save status :
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && mounted) {
         // 5 - on success show a snack bar
 
         ScaffoldMessenger.of(widget.scaffoldKey.currentState!.context)

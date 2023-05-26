@@ -38,10 +38,6 @@ class ArticleList extends ConsumerWidget {
         }
       }
     );
-
-    // 3 - after snack bar timeout send the request to delete the article
-
-    // 4 - on action add the article back, and cancel the deletion request
   }
 
   void deleteArticleFromDatabase() async {

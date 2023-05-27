@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:proj1/models/customer.dart';
 import 'package:http/http.dart' as http;
 
@@ -23,12 +24,12 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
     state = [...state, customer];
   }
 
-  void addCustomer(Customer customer) async {
+  Future<void> addCustomer(Customer customer) async {
     try {
       String customerId = await addCustomerToDB(customer);
       customer.id = customerId;
     } catch (e) {
-      return;
+      throw Exception('Impossible d\'ajouter le client ${customer.name}');
     }
 
     addCustomerUI(customer);
@@ -47,7 +48,7 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
     return state.firstWhere((element) => element.code == code);
   }
 
-  void initListFromDb() async {
+  Future<void> initListFromDb() async {
     String link = Paths.customerPath;
     Uri uri = Uri.parse(link);
     final response = await http.get(uri);
@@ -59,7 +60,8 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
         loadedItems.add(Customer(
           address: value['address'],
           code: value['code'],
-          location: value['location'],
+          longitude: value['longitude'],
+          latitude: value['latitude'],
           name: value['name'],
           id: key,
         ));
@@ -76,8 +78,9 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
     Map<String, dynamic> requestBody = {
       'name': customer.name,
       'address': customer.address,
-      'location': customer.location,
-      'code': customer.location + customer.name,
+      'longitude' : customer.longitude,
+      'latitude' : customer.latitude,
+      'code': '${customer.longitude};${customer.latitude}:${customer.name}',
     };
     final response = await http.post(uri, body: json.encode(requestBody));
 
@@ -97,6 +100,14 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
     if (response.statusCode != 200) {
       throw Exception('Failed to load data');
     }
+  }
+
+  List<Customer> findNearCustomers(Position position, double distance){
+
+    return state.where((customer) {
+     return Geolocator.distanceBetween(position.latitude, position.longitude,
+                                                    customer.latitude, customer.longitude) < distance;
+    }).toList();
   }
 }
 

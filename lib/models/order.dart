@@ -1,6 +1,6 @@
 
 import 'package:proj1/models/customer.dart';
-import 'package:proj1/models/orderLine.dart';
+import 'package:proj1/models/order_line.dart';
 
 class Order{
 

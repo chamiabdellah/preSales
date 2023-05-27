@@ -1,43 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:proj1/providers/list_of_customers_provider.dart';
+import 'package:proj1/utils/GeoUtils.dart';
 
 import '../../models/customer.dart';
 import '../../widgets/customerList.dart';
 
-class ChooseCustomerScreen extends StatefulWidget {
+class ChooseCustomerScreen extends ConsumerStatefulWidget {
   const ChooseCustomerScreen({Key? key}) : super(key: key);
 
   @override
-  State<ChooseCustomerScreen> createState() => _ChooseCustomerScreenState();
+  ConsumerState<ChooseCustomerScreen> createState() => _ChooseCustomerScreenState();
 }
 
-class _ChooseCustomerScreenState extends State<ChooseCustomerScreen> {
+class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
 
-  final List<Customer> nearCustomers = [];
+  List<Customer> nearCustomers = [];
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
 
+    getNearCustomers();
   }
 
   void getNearCustomers() async {
 
     // 1 get current location
+    Position position = await GeoUtil.getUserLocation(context);
+    final List<Customer> listCustomers = ref.read(listOfCustomersProvider);
+    if(listCustomers.isEmpty){
+      await ref.read(listOfCustomersProvider.notifier).initListFromDb();
+    }
 
-    // 2 get the near customers from the list
-
+    setState(() {
+      nearCustomers = ref.read(listOfCustomersProvider.notifier).findNearCustomers(position, 20);
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Liste des clients"),
+        title: const Text("Choisissez le client"),
       ),
       body: ListView.builder(
         itemCount: nearCustomers.length,
         itemBuilder: (context, index) {
-          return CustomerList(customer: nearCustomers[index]);
+          return CustomerList(customer: nearCustomers[index], showDeleteButton: false,);
         },
       ),
     );

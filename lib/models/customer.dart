@@ -1,15 +1,17 @@
 
 class Customer{
 
-  String location;
+  double longitude;
+  double latitude;
   String name;
   String code;
   String? id;
   String address;
 
   Customer({
-    required this.location,
     required this.name,
+    required this.longitude,
+    required this.latitude,
     this.id,
     this.code = '',
     required this.address,

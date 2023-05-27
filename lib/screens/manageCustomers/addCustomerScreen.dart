@@ -55,15 +55,26 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
 
   }
 
-  void addCustomer(){
+  void addCustomer() async {
     final Customer customer = Customer(
       address: address!,
-      location: '$latitude+$longitude',
+      latitude: latitude!,
+      longitude: longitude!,
       name: customerNameController!.value.text,
     );
 
     if(_customerFormKey.currentState!.validate()){
-      ref.read(listOfCustomersProvider.notifier).addCustomer(customer);
+       Future<void> future = ref.read(listOfCustomersProvider.notifier).addCustomer(customer);
+       await future;
+       if(mounted) {
+         Navigator.of(context).pop();
+         final snackBar = SnackBar(
+           duration: const Duration(seconds: 5),
+           content: Text(
+               'Le client ${customer.name} a été ajouté avec succès'),
+         );
+         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+       }
     }
   }
 

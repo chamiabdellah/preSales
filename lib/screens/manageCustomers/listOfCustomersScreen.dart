@@ -48,7 +48,12 @@ class _ListOfCustomersScreenState extends ConsumerState<ListOfCustomersScreen> {
       body: ListView.builder(
         itemCount: listCustomers.length,
         itemBuilder: (context, index) {
-          return CustomerList(customer: listCustomers[index]);
+          return CustomerList(
+            customer: listCustomers[index],
+            showDeleteButton: true,
+            onDelete: () => ref.read(listOfCustomersProvider.notifier).deleteCustomer(listCustomers[index]),
+            onClick: null,
+          );
         },
       ),
     );

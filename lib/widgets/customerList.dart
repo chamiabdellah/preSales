@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:proj1/providers/list_of_customers_provider.dart';
 import 'package:proj1/screens/manageCustomers/addCustomerScreen.dart';
 
 import '../models/customer.dart';
 
 class CustomerList extends ConsumerWidget {
-  const CustomerList({Key? key, required this.customer}) : super(key: key);
+  const CustomerList({Key? key,
+    required this.customer,
+    this.showDeleteButton = true,
+    this.onDelete,
+    this.onClick,}) : super(key: key);
 
   final Customer customer;
+  final bool showDeleteButton;
+  final VoidCallback? onDelete;
+  final VoidCallback? onClick;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,14 +30,14 @@ class CustomerList extends ConsumerWidget {
           ),
           title: Text(customer.name),
           subtitle: Text(customer.address),
-          trailing: InkWell(
-            onTap: () => ref.read(listOfCustomersProvider.notifier).deleteCustomer(customer),
+          trailing: showDeleteButton ? InkWell(
+            onTap: onDelete,
             child: const Icon(
               size: 30,
               Icons.delete,
               color: Colors.deepOrangeAccent,
             ),
-          ),
+          ) : null,
           onTap: () {
             // Navigate to article 1
             Navigator.push(

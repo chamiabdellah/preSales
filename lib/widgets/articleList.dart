@@ -9,9 +9,17 @@ import '../screens/manageArticles/addArticleScreen.dart';
 import '../utils/Paths.dart';
 
 class ArticleList extends ConsumerWidget {
-  const ArticleList({Key? key, required this.article}) : super(key: key);
+  const ArticleList({Key? key,
+    required this.article,
+    this.showDeleteButton = true,
+    this.onDelete,
+    this.onClick,
+  }) : super(key: key);
 
   final Article article;
+  final bool showDeleteButton;
+  final Function? onDelete;
+  final Function? onClick;
 
   void deleteArticle(BuildContext context, WidgetRef ref) async {
     // 1 - remove the article from the articleList

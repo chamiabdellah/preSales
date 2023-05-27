@@ -90,7 +90,7 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
   }
 
   void deleteCustomerDB(String id) async {
-    String link = Paths.getArticlePathWithId(id);
+    String link = Paths.getCustomerPathWithId(id);
     Uri uri = Uri.parse(link);
     final response = await http.delete(uri);
 

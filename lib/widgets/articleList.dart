@@ -5,7 +5,7 @@ import 'package:proj1/models/Article.dart';
 import 'package:proj1/providers/list_of_articles_provider.dart';
 import 'package:http/http.dart' as http;
 
-import '../screens/addArticleScreen.dart';
+import '../screens/manageArticles/addArticleScreen.dart';
 import '../utils/Paths.dart';
 
 class ArticleList extends ConsumerWidget {

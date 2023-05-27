@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:proj1/screens/listOfCustomersScreen.dart';
+import 'package:proj1/screens/createOrder/chooseCustomerScreen.dart';
+import 'package:proj1/screens/manageCustomers/listOfCustomersScreen.dart';
 
 import '../widgets/menuItem.dart';
-import 'listOfArticlesScreen.dart';
+import 'manageArticles/listOfArticlesScreen.dart';
 
 class MenuScreen extends StatelessWidget {
   const MenuScreen({Key? key}) : super(key: key);
@@ -27,7 +28,7 @@ class MenuScreen extends StatelessWidget {
           ),
           MenuItem(
             title : "Créer une commande",
-            toScreen : ListOfArticles(),
+            toScreen : ChooseCustomerScreen(),
             color : Colors.greenAccent,
           ),
           MenuItem(

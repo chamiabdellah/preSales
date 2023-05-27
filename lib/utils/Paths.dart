@@ -33,10 +33,10 @@ class Paths{
       "?orderBy=\"customerCode\"&equalTo=\"%CUSTOMER_CODE%\"";
 
   static String getCustomerByCodePath(String code){
-    return articleByCode.replaceAll("%CUSTOMER_CODE%", code);
+    return customerByCode.replaceAll("%CUSTOMER_CODE%", code);
   }
 
   static String getCustomerPathWithId(String id){
-    return articleWithId.replaceAll("%CUSTOMER_ID%", id);
+    return customerWithId.replaceAll("%CUSTOMER_ID%", id);
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:proj1/providers/list_of_customers_provider.dart';
+import 'package:proj1/providers/order_provider.dart';
+import 'package:proj1/screens/createOrder/scanArticleScreen.dart';
 import 'package:proj1/utils/GeoUtils.dart';
 
 import '../../models/customer.dart';
@@ -22,13 +24,10 @@ class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
   @override
   void initState() {
     super.initState();
-
     getNearCustomers();
   }
 
   void getNearCustomers() async {
-
-    // 1 get current location
     Position position = await GeoUtil.getUserLocation(context);
     final List<Customer> listCustomers = ref.read(listOfCustomersProvider);
     if(listCustomers.isEmpty){
@@ -41,6 +40,13 @@ class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
     });
   }
 
+  void onSelectedCustomer(Customer customer){
+    ref.read(orderProvider.notifier).createOrder(customer);
+
+    // navigate to the next screen after choosing the customer
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) => const ScanArticleScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +56,11 @@ class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
       body: ListView.builder(
         itemCount: nearCustomers.length,
         itemBuilder: (context, index) {
-          return CustomerList(customer: nearCustomers[index], showDeleteButton: false,);
+          return CustomerList(
+            customer: nearCustomers[index],
+            showDeleteButton: false,
+            onClick: () => onSelectedCustomer(nearCustomers[index]),
+          );
         },
       ),
     );

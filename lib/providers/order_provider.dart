@@ -30,6 +30,6 @@ class OrderNotifier extends StateNotifier<Order?>{
 
 }
 
-final listOfArticlesProvider = StateNotifierProvider<OrderNotifier, Order?>((ref){
+final orderProvider = StateNotifierProvider<OrderNotifier, Order?>((ref){
   return OrderNotifier();
 });

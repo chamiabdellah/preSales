@@ -18,4 +18,14 @@ class Article {
     this.unit="Pce",
   required this.articleCode});
 
+  Article.fromJson(MapEntry<String, dynamic> json):
+    id = json.key,
+    articleCode = json.value['articleCode'],
+    unit = json.value['unit'],
+    quantity = json.value['quantity'].toDouble(),
+    price = json.value['price'].toDouble(),
+    name = json.value['articleName'],
+    picture = json.value['image'];
+
+
 }

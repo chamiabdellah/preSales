@@ -52,7 +52,14 @@ class _ListOfCustomersScreenState extends ConsumerState<ListOfCustomersScreen> {
             customer: listCustomers[index],
             showDeleteButton: true,
             onDelete: () => ref.read(listOfCustomersProvider.notifier).deleteCustomer(listCustomers[index]),
-            onClick: null,
+            onClick: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (ctx) => const AddCustomerScreen()
+                ),
+              );
+            },
           );
         },
       ),

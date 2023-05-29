@@ -39,8 +39,7 @@ class GeoUtil{
     bool isPermitted = await GeoUtil.handleLocationPermission(context);
 
     if(isPermitted) {
-      return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high,
-        forceAndroidLocationManager: true);
+      return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
     } else {
       throw Exception('impossible de déterminer votre localisation');
     }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:proj1/screens/manageCustomers/addCustomerScreen.dart';
-
 import '../models/customer.dart';
 
 class CustomerList extends ConsumerWidget {
@@ -38,15 +36,7 @@ class CustomerList extends ConsumerWidget {
               color: Colors.deepOrangeAccent,
             ),
           ) : null,
-          onTap: () {
-            // Navigate to article 1
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (ctx) => const AddCustomerScreen()
-              ),
-            );
-          },
+          onTap: onClick,
         ),
       ),
     );

@@ -16,4 +16,13 @@ class Order{
     this.totalDiscount = 0,
 });
 
+  double calculateTotalCost(){
+
+    for (var orderLine in listOrderLines) {
+      totalCost += orderLine.totalPrice;
+    }
+
+    return totalCost;
+  }
+
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:proj1/models/Article.dart';
 import 'package:proj1/widgets/articleList.dart';
@@ -51,6 +52,46 @@ class _ListOfArticlesState extends ConsumerState<ListOfArticles> {
     fetchArticles();
   }
 
+  void deleteArticle(BuildContext context, Article article) async {
+    // 1 - remove the article from the articleList
+    ref
+        .read(listOfArticlesProvider.notifier)
+        .deleteArticle(article.articleCode);
+
+    // 2 - show a snack bar with cancel button
+    SnackBar snackBar = SnackBar(
+      content: Text("L'article ${article.name} a été supprimé"),
+      action: SnackBarAction(
+        label: "Annuler",
+        onPressed: () {
+          ref.read(listOfArticlesProvider.notifier).addArticle(article);
+        },
+      ),
+      duration: const Duration(seconds: 7),
+    );
+
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(snackBar).closed.then((SnackBarClosedReason reason) {
+      if(reason != SnackBarClosedReason.action){
+        deleteArticleFromDatabase(article);
+      }
+    }
+    );
+  }
+
+  void deleteArticleFromDatabase(Article article) async {
+    Uri uri = Uri.parse(Paths.getArticlePathWithId(article.id));
+
+    final response = await http.delete(uri);
+    if(response.statusCode == 200){
+      Reference storageRef = FirebaseStorage.instance
+          .ref()
+          .child('article_images')
+          .child('${article.articleCode}${article.name}.jpeg');
+      await storageRef.delete();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     listOfArticle = ref.watch(listOfArticlesProvider);
@@ -76,7 +117,15 @@ class _ListOfArticlesState extends ConsumerState<ListOfArticles> {
       body: ListView.builder(
         itemCount: listOfArticle.length,
         itemBuilder: (context, index) {
-          return ArticleList(article: listOfArticle[index]);
+          return ArticleList(
+              article: listOfArticle[index],
+              onDelete: ()=> deleteArticle(context, listOfArticle[index]),
+              onClick: ()=> Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (ctx) => AddArticleScreen(baseArticle: listOfArticle[index])),
+              ),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -47,10 +48,11 @@ class _ImagePickerState extends State<PickImageCamera> {
   );
 
   Widget noImageContent() {
-    return widget.link == null ? defaultContent : Image.network(
+    return widget.link == null ? defaultContent : CachedNetworkImage(
       height: 150,
-      widget.link!,
-      errorBuilder: (BuildContext context, Object obj, StackTrace? stackTrace) {
+      imageUrl : widget.link!,
+      placeholder: (context, url) => const CircularProgressIndicator(),
+      errorWidget: (context, url, error) {
         return defaultContent;
       },
     );

@@ -6,7 +6,6 @@ import 'package:proj1/providers/order_provider.dart';
 
 import '../../models/order.dart';
 import '../../models/order_line.dart';
-import '../../widgets/articleList.dart';
 
 class ConfirmOrderScreen extends ConsumerWidget {
   const ConfirmOrderScreen({Key? key}) : super(key: key);
@@ -27,7 +26,7 @@ class ConfirmOrderScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          Center(
+          /*Center(
             child: ListView.builder(
               itemCount: listOfArticle.length,
               itemBuilder: (context, index) {
@@ -37,7 +36,7 @@ class ConfirmOrderScreen extends ConsumerWidget {
                 );
               },
             ),
-          ),
+          ),*/
           const SizedBox(height: 20,),
           Text('Cout Total : ${order.calculateTotalCost()}'),
         ],

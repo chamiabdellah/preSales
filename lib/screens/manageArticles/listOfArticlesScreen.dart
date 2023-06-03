@@ -20,8 +20,13 @@ class ListOfArticles extends ConsumerStatefulWidget {
 
 class _ListOfArticlesState extends ConsumerState<ListOfArticles> {
   List<Article> listOfArticle = [];
+  bool isLoading = false;
+  bool isFailed = false;
 
   Future<void> fetchArticles() async {
+    setState(() {
+      isLoading = true;
+    });
     String link = Paths.articlePath;
     Uri uri = Uri.parse(link);
     final response = await http.get(uri);
@@ -41,8 +46,13 @@ class _ListOfArticlesState extends ConsumerState<ListOfArticles> {
         ));
       });
       ref.read(listOfArticlesProvider.notifier).state = loadedItems;
+      setState(() {
+        isLoading = false;
+      });
     } else {
-      throw Exception('Failed to load data');
+      setState(() {
+        isFailed = true;
+      });
     }
   }
 
@@ -114,7 +124,8 @@ class _ListOfArticlesState extends ConsumerState<ListOfArticles> {
         ],
         title: const Text("Liste des articles"),
       ),
-      body: ListView.builder(
+      body: isLoading ? const Center(child: CircularProgressIndicator()) :
+      isFailed ? ErrorWidget(Exception("failed to load the images")) : ListView.builder(
         itemCount: listOfArticle.length,
         itemBuilder: (context, index) {
           return ArticleList(

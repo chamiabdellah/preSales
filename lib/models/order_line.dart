@@ -16,4 +16,19 @@ class OrderLine {
     this.totalPrice = 0,
 });
 
+  OrderLine.fromJson(MapEntry<String, dynamic> json):
+        article = Article.fromJson(json.value['name']),
+        index = json.value['index'],
+        quantity = json.value['quantity'].toDouble(),
+        discount = json.value['discount'].toDouble(),
+        totalPrice = json.value['totalPrice'].toDouble();
+
+  Map toJson() =>{
+    'article' : article.toJson(),
+    'index' : index,
+    'quantity' : quantity,
+    'discount' : discount,
+    'totalPrice' : totalPrice,
+  };
+
 }

@@ -9,14 +9,17 @@ class ArticleList extends ConsumerWidget {
     required this.article,
     this.onDelete,
     this.onClick,
+    this.showArticlePrice = false,
   }) : super(key: key);
 
   final Article article;
   final VoidCallback? onDelete;
   final VoidCallback? onClick;
+  final bool showArticlePrice;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     return SizedBox(
       height: 80,
       child: Card(
@@ -24,7 +27,7 @@ class ArticleList extends ConsumerWidget {
         child: ListTile(
           key: ValueKey(article.id),
           leading: SizedBox(
-            width: 100,
+            width: 60,
             child: CachedNetworkImage(
               imageUrl: article.picture,
               fit: BoxFit.scaleDown,
@@ -34,8 +37,10 @@ class ArticleList extends ConsumerWidget {
             ),
           ),
           title: Text(article.name),
-          subtitle: Text(article.articleCode),
-          trailing: onDelete != null
+          subtitle: Text(article.unit),
+          trailing: showArticlePrice ?
+            Text('${article.price} DH', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300),)
+          : onDelete != null
               ? InkWell(
                   onTap: onDelete,
                   child: const Icon(

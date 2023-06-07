@@ -3,6 +3,7 @@ import 'package:proj1/models/Article.dart';
 import 'package:proj1/models/customer.dart';
 import 'package:proj1/models/order.dart';
 import 'package:proj1/models/order_line.dart';
+import 'package:proj1/utils/Paths.dart';
 
 class OrderNotifier extends StateNotifier<Order?>{
   OrderNotifier() : super(null);
@@ -22,10 +23,18 @@ class OrderNotifier extends StateNotifier<Order?>{
   }
 
   void deleteOrderLine(OrderLine orderLine){
-    state!.listOrderLines = state!.listOrderLines.where(
-            (ordLne) => ordLne.article.id != orderLine.article.id
-                && ordLne.index != orderLine.index)
-        .toList();
+    state!.listOrderLines.remove(orderLine);
+  }
+
+  void setQuantityOrderLine(OrderLine orderLine, double newQuatity){
+    state!.listOrderLines.firstWhere((element) => element.index == orderLine.index).quantity = newQuatity;
+  }
+
+  void submitOrder() async {
+    final Order? order = state;
+    String link = PathsBuilder(Element.order).getElementPath();
+    Uri uri = Uri.parse(link);
+
   }
 
 }

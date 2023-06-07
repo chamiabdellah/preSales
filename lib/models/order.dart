@@ -4,6 +4,7 @@ import 'package:proj1/models/order_line.dart';
 
 class Order{
 
+  String? id;
   final Customer customer;
   List<OrderLine> listOrderLines;
   double totalCost;
@@ -17,12 +18,26 @@ class Order{
 });
 
   double calculateTotalCost(){
-
+    double orderSum = 0;
     for (var orderLine in listOrderLines) {
-      totalCost += orderLine.totalPrice;
+      orderSum += orderLine.quantity * (orderLine.article.price - orderLine.discount);
     }
-
-    return totalCost;
+    totalCost = orderSum;
+    return orderSum;
   }
 
+  Order.fromJson(MapEntry<String, dynamic> json):
+      id = json.key,
+      customer = Customer.fromJson(json.value['customer']),
+      listOrderLines = json.value['listOrderLines'].map((orderLine) => OrderLine.fromJson(orderLine)).toList(),
+      totalCost = json.value['totalCost'],
+      totalDiscount = json.value['totalDiscount'];
+
+  Map toJson() => {
+    'id' : id,
+    'totalCost' : totalCost,
+    'totalDiscount' : totalDiscount,
+    'customer' : customer.toJson(),
+    'listOrderLines' : listOrderLines.map((orderLine) => orderLine.toJson()).toList(),
+  };
 }

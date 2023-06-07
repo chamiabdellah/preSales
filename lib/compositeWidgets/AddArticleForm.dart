@@ -63,7 +63,7 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
   }
 
   void addToDataBase() async {
-    if (_productFormKey.currentState == null || _articleImage == null) {
+    if (_productFormKey.currentState == null || (_articleImage == null && isAddMode)) {
       return;
     }
 
@@ -79,8 +79,13 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
         return;
       }
 
-      // upload the image to the firestore
-      String imagePath = await uploadImage();
+      String imagePath;
+      if(_articleImage != null) {
+        // upload the image to the firestore
+        imagePath = await uploadImage();
+      } else {
+        imagePath = widget.baseArticle!.picture;
+      }
 
       final Uri url;
       if (isAddMode) {

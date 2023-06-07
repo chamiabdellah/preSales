@@ -3,6 +3,7 @@ import 'package:proj1/screens/createOrder/chooseCustomerScreen.dart';
 import 'package:proj1/screens/manageCustomers/listOfCustomersScreen.dart';
 
 import '../widgets/menuItem.dart';
+import 'createOrder/confirmOrderScreen.dart';
 import 'manageArticles/listOfArticlesScreen.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -36,7 +37,8 @@ class MenuScreen extends StatelessWidget {
           ),
           MenuItem(
             title : "Confirmer une commande",
-            toScreen : ListOfArticles(),
+            toScreen: ConfirmOrderScreen(),
+            //toScreen : ListOfArticles(),
             color : Colors.redAccent,
             assetLogo: 'assets/images/checkout.png',
           ),

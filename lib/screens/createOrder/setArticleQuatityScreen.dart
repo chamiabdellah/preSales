@@ -131,7 +131,6 @@ class _SetArticleQuantityState extends ConsumerState<SetArticleQuantity> {
             ),
           ),
           Positioned(
-
             bottom: 0,
             child: Column(
               children: [

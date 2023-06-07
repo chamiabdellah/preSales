@@ -27,5 +27,13 @@ class Article {
     name = json.value['articleName'],
     picture = json.value['image'];
 
+  Map<String,String> toJson() => {
+    'articleCode': articleCode,
+    'unit': unit,
+    'quantity' : quantity.toString(),
+    'price' : price.toString(),
+    'name' : name,
+    'picture' : picture,
+  };
 
 }

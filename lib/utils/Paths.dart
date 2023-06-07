@@ -39,4 +39,34 @@ class Paths{
   static String getCustomerPathWithId(String id){
     return customerWithId.replaceAll("%CUSTOMER_ID%", id);
   }
+
+}
+
+class PathsBuilder{
+
+  Element element;
+
+  PathsBuilder(this.element);
+
+  static const String _elementPath = "https://amlogpresales-default-rtdb.europe-west1.firebasedatabase.app/*%*ELEMENT*%*.json";
+
+  static const String _elementWithId = "https://amlogpresales-default-rtdb.europe-west1.firebasedatabase.app/*%*ELEMENT*%*/*%*ELEMENT_ID*%*.json";
+
+  String getElementPath(){
+    return _elementPath.replaceAll("*%*ELEMENT*%*", element.value);
+  }
+
+  String getElementPathWithId(String id){
+    return _elementWithId.replaceAll("*%*ELEMENT*%*", element.value).replaceAll("*%*ELEMENT_ID*%*", id);
+  }
+
+}
+
+enum Element {
+  article("Articles"),
+  customer("Customers"),
+  order("Orders");
+
+  const Element(this.value);
+  final String value;
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proj1/screens/createOrder/chooseCustomerScreen.dart';
 import 'package:proj1/screens/manageCustomers/listOfCustomersScreen.dart';
 
+import '../widgets/cartAppBar.dart';
 import '../widgets/menuItem.dart';
 import 'createOrder/confirmOrderScreen.dart';
 import 'manageArticles/listOfArticlesScreen.dart';
@@ -14,6 +15,9 @@ class MenuScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Menu"),
+        actions: const [
+          CartAppBar(),
+        ],
       ),
       body: const Column(
         children: [

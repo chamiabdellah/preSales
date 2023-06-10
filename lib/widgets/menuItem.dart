@@ -53,10 +53,16 @@ class MenuItem extends StatelessWidget {
                         child : assetLogo != null ?  Image(image: AssetImage(assetLogo!)) : const Placeholder(),
                       ),
                       const SizedBox(width: 15,),
-                      Text(
-                        title,
-                        style: const TextStyle(fontSize: 25),
-                      ),
+                      Expanded(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            title,
+                            style: const TextStyle(fontSize: 25),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),

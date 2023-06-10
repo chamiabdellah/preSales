@@ -19,7 +19,7 @@ class ChooseCustomerScreen extends ConsumerStatefulWidget {
 class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
 
   List<Customer> nearCustomers = [];
-  bool isLoading = true;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -28,6 +28,7 @@ class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
   }
 
   void getNearCustomers() async {
+    isLoading = true;
     Position position = await GeoUtil.getUserLocation(context);
     final List<Customer> listCustomers = ref.read(listOfCustomersProvider);
     if(listCustomers.isEmpty){
@@ -35,7 +36,7 @@ class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
     }
 
     setState(() {
-      nearCustomers = ref.read(listOfCustomersProvider.notifier).findNearCustomers(position, 20);
+      nearCustomers = ref.read(listOfCustomersProvider.notifier).findNearCustomers(position, 100);
       isLoading = false;
     });
   }

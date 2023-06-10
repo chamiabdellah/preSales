@@ -105,7 +105,7 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
   List<Customer> findNearCustomers(Position position, double distance){
 
     return state.where((customer) {
-     return Geolocator.distanceBetween(position.latitude, position.longitude,
+      return Geolocator.distanceBetween(position.latitude, position.longitude,
                                                     customer.latitude, customer.longitude) < distance;
     }).toList();
   }

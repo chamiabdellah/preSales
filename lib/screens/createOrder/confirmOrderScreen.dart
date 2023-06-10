@@ -4,7 +4,9 @@ import 'package:proj1/models/Article.dart';
 import 'package:proj1/providers/list_of_articles_provider.dart';
 import 'package:proj1/providers/list_of_customers_provider.dart';
 import 'package:proj1/providers/order_provider.dart';
+import 'package:proj1/screens/createOrder/orderRecapScreen.dart';
 import 'package:proj1/utils/Formaters.dart';
+import 'package:proj1/widgets/largeButton.dart';
 import 'package:proj1/widgets/quantityForm.dart';
 
 import '../../models/customer.dart';
@@ -38,7 +40,7 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
   void setOrderLineQuantity(OrderLine orderLine, double newQuantity) {
     ref
         .read(orderProvider.notifier)
-        .setQuantityOrderLine(orderLine, newQuantity);
+        .setQuantityOrderLine(orderLine: orderLine, newQuatity: newQuantity);
     setState(() {});
   }
 
@@ -52,13 +54,15 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
     OrderLine orderLine2 = OrderLine(
         article: artilcleTest, index: "2", quantity: 0, totalPrice: 0);
     Order localOrder =
-        Order(customer: customer, listOrderLines: [orderLine1, orderLine2]);
+          Order(customer: customer, listOrderLines: [orderLine1, orderLine2]);
 
     ref.read(orderProvider.notifier).state = localOrder;
   }
 
   void createOrder() async {
-    //ref.read(orderProvider.notifier).
+    ref.read(orderProvider.notifier).saveOrder();
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (ctx) => OrderRecapScreen(order: order)));
   }
 
   @override
@@ -94,6 +98,7 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
                   itemCount: orderLines.length,
                   itemBuilder: (context, index) {
                     return Column(
+                      key: ValueKey(orderLines[index].index),
                       children: [
                         Row(
                           children: [
@@ -130,19 +135,10 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
                   },
                 ),
               ),
-              SizedBox(
-                width: double.infinity,
-                height: 70,
-                child:  ElevatedButton(
-                  style: const ButtonStyle(backgroundColor: MaterialStatePropertyAll(Color.fromRGBO(23, 2, 32, 2)),),
-                  onPressed: ()=>{},
-                  child: const Text("Confirmer",
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+              LargeButton(
+                label: "Confirmer",
+                color: const Color.fromRGBO(23, 2, 32, 2),
+                action: createOrder,
               ),
             ],
           ),

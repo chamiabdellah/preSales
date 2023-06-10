@@ -25,9 +25,12 @@ class _ScanArticleScreenState extends ConsumerState<ScanArticleScreen> {
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
-
     if (!mounted) return;
 
+    if(barcodeScanRes == "-1"){
+      // the user clicked on cancel => pop the screen.
+      Navigator.pop(context);
+    }
     // get the article by code :
     final article = await ref
         .read(listOfArticlesProvider.notifier)

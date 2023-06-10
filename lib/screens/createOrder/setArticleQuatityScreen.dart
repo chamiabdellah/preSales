@@ -6,7 +6,9 @@ import 'package:proj1/screens/createOrder/confirmOrderScreen.dart';
 import 'package:proj1/screens/createOrder/scanArticleScreen.dart';
 import 'package:proj1/utils/ValidationLib.dart';
 import 'package:proj1/widgets/articleList.dart';
+import 'package:proj1/widgets/largeButton.dart';
 
+import '../../widgets/cartAppBar.dart';
 import '../manageArticles/addArticleScreen.dart';
 
 class SetArticleQuantity extends ConsumerStatefulWidget {
@@ -52,7 +54,7 @@ class _SetArticleQuantityState extends ConsumerState<SetArticleQuantity> {
   }
 
   void _createNewOrderLine(){
-    ref.read(orderProvider.notifier).addOrderLine(widget.article, chosenQuantity, 0);
+    ref.read(orderProvider.notifier).addOrderLine(article:  widget.article, quantity:  chosenQuantity, discount:  0);
   }
 
   void updatePrice(String? newQtty){
@@ -76,6 +78,9 @@ class _SetArticleQuantityState extends ConsumerState<SetArticleQuantity> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Entrez la quantité"),
+        actions: const [
+          CartAppBar(),
+        ],
       ),
       body: Stack(
         fit: StackFit.expand,
@@ -134,15 +139,9 @@ class _SetArticleQuantityState extends ConsumerState<SetArticleQuantity> {
             bottom: 0,
             child: Column(
               children: [
-                ElevatedButton(
-                  onPressed: addNewLine,
-                  child: const Text("Ajouter"),
-                ),
+                LargeButton(label: "Ajouter", color: Colors.greenAccent, action: addNewLine,),
                 const SizedBox(height: 3),
-                ElevatedButton(
-                  onPressed: validateQuantity,
-                  child: const Text("Valider"),
-                ),
+                LargeButton(label: "Valider", color: Colors.pinkAccent, action: validateQuantity,),
               ],
             ),
           ),

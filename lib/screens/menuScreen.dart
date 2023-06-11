@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:proj1/screens/confirmOrders/listOfOrdersScreen.dart';
 import 'package:proj1/screens/createOrder/chooseCustomerScreen.dart';
+import 'package:proj1/screens/deliverOrder/listOfDeliverOrdersScreen.dart';
 import 'package:proj1/screens/manageCustomers/listOfCustomersScreen.dart';
 
 import '../widgets/cartAppBar.dart';
 import '../widgets/menuItem.dart';
-import 'createOrder/confirmOrderScreen.dart';
 import 'manageArticles/listOfArticlesScreen.dart';
 
 class MenuScreen extends StatelessWidget {
@@ -41,14 +42,14 @@ class MenuScreen extends StatelessWidget {
           ),
           MenuItem(
             title : "Confirmer une commande",
-            toScreen: ConfirmOrderScreen(),
+            toScreen: ListOfOrdersScreen(),
             //toScreen : ListOfArticles(),
             color : Colors.redAccent,
             assetLogo: 'assets/images/checkout.png',
           ),
           MenuItem(
             title : "Livrer une commande",
-            toScreen : ListOfArticles(),
+            toScreen : ListOfDeliverOrdersScreen(),
             color : Colors.blueGrey,
             assetLogo: 'assets/images/shipped.png',
           ),

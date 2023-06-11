@@ -83,10 +83,8 @@ class _SetArticleQuantityState extends ConsumerState<SetArticleQuantity> {
         ],
       ),
       body: Stack(
-        fit: StackFit.expand,
         children: [
-          SingleChildScrollView(
-            child: Column(
+          Column(
               children: [
                 ArticleList(
                   article: widget.article,
@@ -134,14 +132,14 @@ class _SetArticleQuantityState extends ConsumerState<SetArticleQuantity> {
                 Text('Total : ${widget.article.price * chosenQuantity} DH'),
               ],
             ),
-          ),
+
           Positioned(
-            bottom: 0,
+            bottom : 0,
             child: Column(
-              children: [
-                LargeButton(label: "Ajouter", color: Colors.greenAccent, action: addNewLine,),
-                const SizedBox(height: 3),
-                LargeButton(label: "Valider", color: Colors.pinkAccent, action: validateQuantity,),
+                children: [
+                  LargeButton(label: "Ajouter", color: Colors.greenAccent, onClick: addNewLine,),
+                  const SizedBox(height: 8),
+                  LargeButton(label: "Valider", color: Colors.pinkAccent, onClick: validateQuantity,),
               ],
             ),
           ),

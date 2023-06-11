@@ -278,7 +278,7 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
           ),
           PickImageCamera(
             onPick: setArticleImage,
-            link: isAddMode ? null : widget.baseArticle!.picture,
+            link: isAddMode ? null : widget.baseArticle?.picture,
           ),
           Flexible(
             flex: 1,

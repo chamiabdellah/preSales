@@ -25,7 +25,7 @@ class MenuItem extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-              colors: [color, Color.fromRGBO(color.red, color.green, color.blue, 0.8), color],
+              colors: [color, Color.fromRGBO(color.red, color.green, color.blue, 0.84), color],
               tileMode: TileMode.decal,
               begin: Alignment.topRight,
               end: Alignment.bottomRight,

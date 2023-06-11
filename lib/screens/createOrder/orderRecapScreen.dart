@@ -19,7 +19,7 @@ class OrderRecapScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Flexible(child: Text("Commande crée avec succes")),
+            const Flexible(child: Text("Commande créée avec succes")),
             const Flexible(child: Icon(Icons.check_circle, color: Colors.green,size: 100, )),
             Flexible(child: Text("client : ${order?.customer.name}")),
             Flexible(child: Text("Total à payer : ${Formater.spaceSeparateNumbers("${order?.totalCost}")} DH")),

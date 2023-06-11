@@ -1,7 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/Article.dart';
+
+import 'imageNetworkCached.dart';
 
 class ArticleList extends ConsumerWidget {
   const ArticleList({
@@ -28,14 +29,7 @@ class ArticleList extends ConsumerWidget {
           key: ValueKey(article.id),
           leading: SizedBox(
             width: 60,
-            child: CachedNetworkImage(
-              imageUrl: article.picture,
-              fit: BoxFit.scaleDown,
-              width: 100,
-              placeholder: (context, url) => const CircularProgressIndicator(),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-            ),
-          ),
+              child: ImageNetworkCached(imageUrl: article.picture)),
           title: Text(article.name),
           subtitle: Text(article.unit),
           trailing: showArticlePrice ?

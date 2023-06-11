@@ -40,6 +40,15 @@ class Paths{
     return customerWithId.replaceAll("%CUSTOMER_ID%", id);
   }
 
+  /*
+  Orders
+   */
+  static String unconfirmedOrders = "https://amlogpresales-default-rtdb.europe-west1.firebasedatabase.app/Orders.json"
+      "?orderBy=\"confirmationDate\"&equalTo=\"null\"";
+
+  static String undeliveredOrders = "https://amlogpresales-default-rtdb.europe-west1.firebasedatabase.app/Orders.json"
+      "?orderBy=\"deliveryComment\"&equalTo=\"\"";
+
 }
 
 class PathsBuilder{
@@ -65,7 +74,8 @@ class PathsBuilder{
 enum Element {
   article("Articles"),
   customer("Customers"),
-  order("Orders");
+  order("Orders"),
+  orderCounter("InternalData");
 
   const Element(this.value);
   final String value;

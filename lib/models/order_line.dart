@@ -7,6 +7,7 @@ class OrderLine {
   double quantity = 0;
   double discount = 0;
   double totalPrice = 0;
+  double? availableQuantity;
 
   OrderLine({
     required this.article,
@@ -16,12 +17,20 @@ class OrderLine {
     this.totalPrice = 0,
 });
 
+  double calculateLineCost(){
+    double lineCost = (article.price - discount) * quantity ;
+    totalPrice = lineCost;
+    return lineCost;
+  }
+
   OrderLine.fromJson(MapEntry<String, dynamic> json):
-        article = Article.fromJson(json.value['name']),
+        //article = Article.fromJson(MapEntry((json.value['article'] as Map<String, dynamic>)['id'],(json.value['article'] as Map<String, dynamic>))),
+        article = Article.fromJson(MapEntry("",(json.value['article'] as Map<String, dynamic>))),
         index = json.value['index'],
         quantity = json.value['quantity'].toDouble(),
         discount = json.value['discount'].toDouble(),
-        totalPrice = json.value['totalPrice'].toDouble();
+        totalPrice = json.value['totalPrice'].toDouble(),
+        availableQuantity = json.value['availableQuantity']?.toDouble();
 
   Map toJson() =>{
     'article' : article.toJson(),
@@ -29,6 +38,7 @@ class OrderLine {
     'quantity' : quantity,
     'discount' : discount,
     'totalPrice' : totalPrice,
+    'availableQuantity' : availableQuantity,
   };
 
 }

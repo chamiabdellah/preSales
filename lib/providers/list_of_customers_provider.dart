@@ -103,10 +103,10 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
   }
 
   List<Customer> findNearCustomers(Position position, double distance){
-
+    const int accuracy = 100;
     return state.where((customer) {
       return Geolocator.distanceBetween(position.latitude, position.longitude,
-                                                    customer.latitude, customer.longitude) < distance;
+                                                    customer.latitude, customer.longitude) < distance + accuracy;
     }).toList();
   }
 }

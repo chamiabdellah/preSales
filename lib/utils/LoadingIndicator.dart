@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class LoadingIndicator {
 
-  static void showLoadingIndicator(String text, BuildContext context) {
+  static void showLoadingIndicator(BuildContext context, String text) {
     showDialog(
       context: context,
       barrierDismissible: false,

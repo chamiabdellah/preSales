@@ -45,7 +45,7 @@ class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
     ref.read(orderProvider.notifier).createOrder(customer);
 
     // navigate to the next screen after choosing the customer
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) => const ScanArticleScreen()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => const ScanArticleScreen()));
   }
 
   @override

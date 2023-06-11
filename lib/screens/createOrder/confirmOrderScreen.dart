@@ -5,6 +5,7 @@ import 'package:proj1/providers/list_of_articles_provider.dart';
 import 'package:proj1/providers/list_of_customers_provider.dart';
 import 'package:proj1/providers/order_provider.dart';
 import 'package:proj1/screens/createOrder/orderRecapScreen.dart';
+import 'package:proj1/screens/createOrder/scanArticleScreen.dart';
 import 'package:proj1/utils/Formaters.dart';
 import 'package:proj1/widgets/largeButton.dart';
 import 'package:proj1/widgets/quantityForm.dart';
@@ -34,7 +35,7 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
   @override
   void initState() {
     super.initState();
-    initTestData();
+    // initTestData();
   }
 
   void setOrderLineQuantity(OrderLine orderLine, double newQuantity) {
@@ -74,6 +75,23 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Confirmez la commande"),
+        actions: [
+          InkWell(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (ctx) => const ScanArticleScreen())).then(
+                      (value) => {
+                        Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst)
+                      });
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child : Icon(
+                size: 35,
+                Icons.add,  // add custom icons also
+              ),
+            ),
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -138,7 +156,7 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
               LargeButton(
                 label: "Confirmer",
                 color: const Color.fromRGBO(23, 2, 32, 2),
-                action: createOrder,
+                onClick: createOrder,
               ),
             ],
           ),

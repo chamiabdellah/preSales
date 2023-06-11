@@ -40,7 +40,7 @@ class _ScanArticleScreenState extends ConsumerState<ScanArticleScreen> {
         chosenArticle = article;
       });
       if(mounted) {
-        Navigator.push(context, MaterialPageRoute(builder: (ctx) => SetArticleQuantity(article: chosenArticle!,)));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => SetArticleQuantity(article: chosenArticle!,)));
       }
     } else {
       readBarCode();

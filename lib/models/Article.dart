@@ -22,12 +22,13 @@ class Article {
     id = json.key,
     articleCode = json.value['articleCode'],
     unit = json.value['unit'],
-    quantity = json.value['quantity'].toDouble(),
-    price = json.value['price'].toDouble(),
-    name = json.value['articleName'],
-    picture = json.value['image'];
+    quantity = double.parse(json.value['quantity']),
+    price = double.parse(json.value['price']),
+    name = json.value['name'],
+    picture = json.value['picture'];
 
   Map<String,String> toJson() => {
+    'id' : id,
     'articleCode': articleCode,
     'unit': unit,
     'quantity' : quantity.toString(),

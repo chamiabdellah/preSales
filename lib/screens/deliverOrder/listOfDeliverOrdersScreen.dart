@@ -50,6 +50,7 @@ class _ListOfDeliverOrdersScreenState extends ConsumerState<ListOfDeliverOrdersS
       ),
       body: isLoading ?
       const Center(child: CircularProgressIndicator(),) :
+      listOrders.isEmpty ? const Center(child : Text("aucune commande trouvée")) :
       ListView.builder(
           itemCount:  listOrders.length,
           itemBuilder: (context, index) {

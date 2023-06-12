@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/Article.dart';
+import 'package:proj1/utils/LoadingIndicator.dart';
 import 'package:proj1/utils/ValidationLib.dart';
 import 'package:proj1/widgets/OutlineTextField.dart';
 import 'package:http/http.dart' as http;
@@ -62,7 +63,15 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
     }
   }
 
-  void addToDataBase() async {
+  void addToDataBaseCaller() async{
+    LoadingIndicator.showLoadingIndicator(context, "Création de l'article est en cours");
+    await addToDataBase();
+    if(mounted) {
+      LoadingIndicator.hideLoadingIndicator(context);
+    }
+  }
+
+  Future<void> addToDataBase() async {
     if (_productFormKey.currentState == null || (_articleImage == null && isAddMode)) {
       return;
     }
@@ -203,102 +212,108 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
   @override
   Widget build(BuildContext context) {
     const double columnSpace = 10;
-    return Form(
-      key: _productFormKey,
-      child: Column(
-        children: [
-          const SizedBox(height: columnSpace),
-          OutlineTextField(
-            labelText: 'Nom de l\'article',
-            validationFunc: ValidationLib.nonEmptyField,
-            controller: articleNameController,
-          ),
-          const SizedBox(height: columnSpace),
-          OutlineTextField(
-            labelText: 'Lien de l\'image',
-            validationFunc: ValidationLib.nonEmptyField,
-            controller: articleImageController,
-          ),
-          const SizedBox(height: columnSpace),
-          Row(
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Form(
+          key: _productFormKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(
-                flex: 2,
-                child: OutlineTextField(
-                  labelText: 'Quantité disponible',
-                  validationFunc: ValidationLib.isPositiveNumber,
-                  textInputType: TextInputType.number,
-                  controller: articleQuantityController,
-                ),
+              const SizedBox(height: columnSpace),
+              OutlineTextField(
+                labelText: 'Nom de l\'article',
+                validationFunc: ValidationLib.nonEmptyField,
+                controller: articleNameController,
+              ),
+              const SizedBox(height: columnSpace),
+              OutlineTextField(
+                labelText: 'Lien de l\'image',
+                validationFunc: null,
+                controller: articleImageController,
+              ),
+              const SizedBox(height: columnSpace),
+              Row(
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: OutlineTextField(
+                      labelText: 'Quantité disponible',
+                      validationFunc: ValidationLib.isPositiveNumber,
+                      textInputType: TextInputType.number,
+                      controller: articleQuantityController,
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: OutlineTextField(
+                      labelText: 'Unité',
+                      validationFunc: ValidationLib.nonEmptyField,
+                      controller: articleUnitController,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: columnSpace),
+              Row(
+                children: [
+                  Flexible(
+                    flex: 12,
+                    child: OutlineTextField(
+                      labelText: 'code article',
+                      validationFunc: ValidationLib.nonEmptyField,
+                      controller: articleCodeController,
+                      isEnabled: isAddMode,
+                    ),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: IconButton(
+                      onPressed: isAddMode ? readBarCode : null,
+                      icon: const Icon(Icons.barcode_reader, size: 40),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: columnSpace),
+              Builder(builder: (BuildContext context) {
+                if (!isNewCode! && isAddMode) {
+                  return const Text("Ce code est déjà utilisé");
+                }
+                return const SizedBox.shrink();
+              }),
+              const SizedBox(height: columnSpace),
+              OutlineTextField(
+                labelText: 'Prix',
+                validationFunc: ValidationLib.isPositiveNumber,
+                textInputType: TextInputType.number,
+                controller: articlePriceController,
+              ),
+              PickImageCamera(
+                onPick: setArticleImage,
+                link: isAddMode ? null : widget.baseArticle?.picture,
               ),
               Flexible(
                 flex: 1,
-                child: OutlineTextField(
-                  labelText: 'Unité',
-                  validationFunc: ValidationLib.nonEmptyField,
-                  controller: articleUnitController,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: columnSpace),
-          Row(
-            children: [
-              Flexible(
-                flex: 12,
-                child: OutlineTextField(
-                  labelText: 'code article',
-                  validationFunc: ValidationLib.nonEmptyField,
-                  controller: articleCodeController,
-                  isEnabled: isAddMode,
-                ),
-              ),
-              Flexible(
-                flex: 2,
-                child: IconButton(
-                  onPressed: isAddMode ? readBarCode : null,
-                  icon: const Icon(Icons.barcode_reader, size: 40),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: columnSpace),
-          Builder(builder: (BuildContext context) {
-            if (!isNewCode! && isAddMode) {
-              return const Text("Ce code est déjà utilisé");
-            }
-            return const SizedBox.shrink();
-          }),
-          const SizedBox(height: columnSpace),
-          OutlineTextField(
-            labelText: 'Prix',
-            validationFunc: ValidationLib.isPositiveNumber,
-            textInputType: TextInputType.number,
-            controller: articlePriceController,
-          ),
-          PickImageCamera(
-            onPick: setArticleImage,
-            link: isAddMode ? null : widget.baseArticle?.picture,
-          ),
-          Flexible(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: SizedBox(
-                width: double.infinity,
-                height: 60,
-                child: ElevatedButton(
-                  onPressed: addToDataBase,
-                  child: Text(
-                    isAddMode ? "Ajouter" : "Modifier",
-                    style: const TextStyle(
-                        fontSize: 30, fontWeight: FontWeight.bold),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 60,
+                    child: ElevatedButton(
+                      onPressed: addToDataBaseCaller,
+                      child: Text(
+                        isAddMode ? "Ajouter" : "Modifier",
+                        style: const TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

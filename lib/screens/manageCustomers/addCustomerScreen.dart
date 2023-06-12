@@ -5,6 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:proj1/providers/list_of_customers_provider.dart';
 import 'package:proj1/utils/GeoUtils.dart';
+import 'package:proj1/utils/LoadingIndicator.dart';
 import 'package:proj1/utils/ValidationLib.dart';
 import 'package:proj1/widgets/OutlineTextField.dart';
 import 'package:proj1/widgets/userCoordinates.dart';
@@ -64,9 +65,10 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
     );
 
     if(_customerFormKey.currentState!.validate()){
-       Future<void> future = ref.read(listOfCustomersProvider.notifier).addCustomer(customer);
-       await future;
+      LoadingIndicator.showLoadingIndicator(context, "Ajout du client");
+       await ref.read(listOfCustomersProvider.notifier).addCustomer(customer);
        if(mounted) {
+         LoadingIndicator.hideLoadingIndicator(context);
          Navigator.of(context).pop();
          final snackBar = SnackBar(
            duration: const Duration(seconds: 5),
@@ -84,61 +86,69 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
         appBar: AppBar(
           title: const Text("Ajouter un client"),
         ),
-        body: Form(
-          key: _customerFormKey,
-          child: Column(
-            children: [
-              InkWell(
-                onTap: _getUserLocation,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    border: Border(bottom: BorderSide(width: 1)),
-                    color: Colors.white54,
-                  ),
-                  height: 200,
-                  width: double.infinity,
-                  child: const Icon(
-                    Icons.location_on_outlined,
-                    size: 100,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              OutlineTextField(
-                labelText: "Nom du client",
-                controller: customerNameController,
-                validationFunc: ValidationLib.nonEmptyField,
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 60,
-                  child: ElevatedButton(
-                    onPressed: addCustomer,
-                    child: const Text(
-                      "Ajouter",
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        body: SingleChildScrollView(
+          child: Form(
+            key: _customerFormKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                InkWell(
+                  onTap: _getUserLocation,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      border: Border(bottom: BorderSide(width: 1)),
+                      color: Colors.white54,
+                    ),
+                    height: 200,
+                    width: double.infinity,
+                    child: const Icon(
+                      Icons.location_on_outlined,
+                      size: 100,
                     ),
                   ),
                 ),
-              ),
-              const Expanded(child: SizedBox()),
-               Padding(
-                padding: const EdgeInsets.all(30.0),
-                child: UserCoordinates(
-                  longitude: longitude,
-                  latitude: latitude,
-                  address: address,
+                const SizedBox(
+                  height: 30,
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: OutlineTextField(
+                    labelText: "Nom du client",
+                    controller: customerNameController,
+                    validationFunc: ValidationLib.nonEmptyField,
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 60,
+                    child: ElevatedButton(
+                      onPressed: addCustomer,
+                      child: const Text(
+                        "Ajouter",
+                        style:
+                            TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ),
+                //const Expanded(child: SizedBox()),
+                 Flexible(
+                   child: Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: UserCoordinates(
+                      longitude: longitude,
+                      latitude: latitude,
+                      address: address,
+                    ),
+                ),
+                 ),
+              ],
+            ),
           ),
         ));
   }

@@ -20,6 +20,7 @@ class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
 
   List<Customer> nearCustomers = [];
   bool isLoading = false;
+  bool notFound = false;
 
   @override
   void initState() {
@@ -28,7 +29,9 @@ class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
   }
 
   void getNearCustomers() async {
-    isLoading = true;
+    setState(() {
+      isLoading = true;
+    });
     Position position = await GeoUtil.getUserLocation(context);
     final List<Customer> listCustomers = ref.read(listOfCustomersProvider);
     if(listCustomers.isEmpty){
@@ -54,7 +57,8 @@ class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
       appBar: AppBar(
         title: const Text("Choisissez le client"),
       ),
-      body: ListView.builder(
+      body: isLoading ? const CircularProgressIndicator() :
+      ListView.builder(
         itemCount: nearCustomers.length,
         itemBuilder: (context, index) {
           return CustomerList(

@@ -125,7 +125,9 @@ class _ListOfArticlesState extends ConsumerState<ListOfArticles> {
         title: const Text("Liste des articles"),
       ),
       body: isLoading ? const Center(child: CircularProgressIndicator()) :
-      isFailed ? ErrorWidget(Exception("failed to load the images")) : ListView.builder(
+      isFailed ? ErrorWidget(Exception("failed to load the images")) :
+      listOfArticle.isEmpty ? const Center(child: Text('Aucun article.'),) :
+      ListView.builder(
         itemCount: listOfArticle.length,
         itemBuilder: (context, index) {
           return ArticleList(

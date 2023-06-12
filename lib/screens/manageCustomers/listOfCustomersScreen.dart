@@ -16,11 +16,26 @@ class ListOfCustomersScreen extends ConsumerStatefulWidget {
 class _ListOfCustomersScreenState extends ConsumerState<ListOfCustomersScreen> {
 
   List<Customer> listCustomers = [];
+  bool isLoading = false;
+  bool failed = true;
 
   @override
   void initState() {
     super.initState();
-    ref.read(listOfCustomersProvider.notifier).initListFromDb();
+    setState(() {
+      isLoading = true;
+    });
+    try{
+      ref.read(listOfCustomersProvider.notifier).initListFromDb();
+    } catch(e){
+       setState(() {
+         isLoading = false;
+         failed = true;
+       });
+    }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -45,21 +60,16 @@ class _ListOfCustomersScreenState extends ConsumerState<ListOfCustomersScreen> {
         ],
         title: const Text("Liste des clients"),
       ),
-      body: ListView.builder(
+      body: isLoading ? const CircularProgressIndicator():
+      listCustomers.isEmpty ? const Center(child : Text("Aucun client")) :
+      ListView.builder(
         itemCount: listCustomers.length,
         itemBuilder: (context, index) {
           return CustomerList(
             customer: listCustomers[index],
             showDeleteButton: true,
             onDelete: () => ref.read(listOfCustomersProvider.notifier).deleteCustomer(listCustomers[index]),
-            onClick: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (ctx) => const AddCustomerScreen()
-                ),
-              );
-            },
+            onClick: null,
           );
         },
       ),

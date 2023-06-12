@@ -48,8 +48,8 @@ class _ListOfOrdersScreenState extends ConsumerState<ListOfOrdersScreen> {
       appBar: AppBar(
         title: const Text("Liste des commandes"),
       ),
-      body: isLoading ?
-      const Center(child: CircularProgressIndicator(),) :
+      body: isLoading ? const Center(child: CircularProgressIndicator(),) :
+      listOrders.isEmpty ? const Center(child : Text("aucune commande trouvée")) :
       ListView.builder(
         itemCount:  listOrders.length,
           itemBuilder: (context, index) {

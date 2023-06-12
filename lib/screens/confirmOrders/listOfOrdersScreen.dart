@@ -22,7 +22,7 @@ class _ListOfOrdersScreenState extends ConsumerState<ListOfOrdersScreen> {
       isLoading = true;
     });
     try{
-      ref.read(listOfConfirmOrdersProvider.notifier).initOrdersListFromDb();
+      await ref.read(listOfConfirmOrdersProvider.notifier).initOrdersListFromDb();
     } catch(e){
       setState(() {
         isLoading = false;

@@ -60,7 +60,7 @@ class _ListOfCustomersScreenState extends ConsumerState<ListOfCustomersScreen> {
         ],
         title: const Text("Liste des clients"),
       ),
-      body: isLoading ? const CircularProgressIndicator():
+      body: isLoading ? const Center(child:CircularProgressIndicator()):
       listCustomers.isEmpty ? const Center(child : Text("Aucun client")) :
       ListView.builder(
         itemCount: listCustomers.length,

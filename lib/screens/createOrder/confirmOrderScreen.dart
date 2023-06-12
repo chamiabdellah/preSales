@@ -7,6 +7,7 @@ import 'package:proj1/providers/order_provider.dart';
 import 'package:proj1/screens/createOrder/orderRecapScreen.dart';
 import 'package:proj1/screens/createOrder/scanArticleScreen.dart';
 import 'package:proj1/utils/Formaters.dart';
+import 'package:proj1/utils/LoadingIndicator.dart';
 import 'package:proj1/widgets/largeButton.dart';
 import 'package:proj1/widgets/quantityForm.dart';
 
@@ -61,9 +62,13 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
   }
 
   void createOrder() async {
-    ref.read(orderProvider.notifier).saveOrder();
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (ctx) => OrderRecapScreen(order: order)));
+    LoadingIndicator.showLoadingIndicator(context, "Confirmation de la commande");
+    await ref.read(orderProvider.notifier).saveOrder();
+    if(mounted){
+      LoadingIndicator.hideLoadingIndicator(context);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (ctx) => OrderRecapScreen(order: order)));
+    }
   }
 
   @override

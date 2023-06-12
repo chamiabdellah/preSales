@@ -53,8 +53,8 @@ class OrderNotifier extends StateNotifier<Order?>{
     int counter = getData['OrderCounter'];
 
     // 2 increment and post the new value
-    final requestBody = {'OrderCounter' :  counter + 1};
-    final patchResponse = await http.patch(uri,body: requestBody);
+    final Map<String, int> requestBody = {'OrderCounter' :  counter + 1};
+    final patchResponse = await http.patch(uri,body: json.encode(requestBody));
     if(patchResponse.statusCode == 200){
       return counter.formatOrderCounter();
     } else {
@@ -62,7 +62,7 @@ class OrderNotifier extends StateNotifier<Order?>{
     }
   }
 
-  void saveOrder() async {
+  Future<void> saveOrder() async {
     String link = PathsBuilder(Element.order).getElementPath();
     Uri uri = Uri.parse(link);
     state!.creationDate = DateTime.now();

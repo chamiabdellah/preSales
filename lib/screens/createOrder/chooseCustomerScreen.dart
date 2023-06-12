@@ -57,7 +57,7 @@ class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
       appBar: AppBar(
         title: const Text("Choisissez le client"),
       ),
-      body: isLoading ? const CircularProgressIndicator() :
+      body: isLoading ? const Center(child:CircularProgressIndicator()):
       ListView.builder(
         itemCount: nearCustomers.length,
         itemBuilder: (context, index) {

@@ -14,6 +14,7 @@ class GeoUtil{
           content: Text('Localisation est désactivé sur votre téléphone.')));
       return false;
     }
+
     permission = await Geolocator.checkPermission();
 
     if (permission == LocationPermission.denied) {

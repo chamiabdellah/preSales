@@ -63,6 +63,17 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
     }
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    articleNameController?.dispose();
+    articleQuantityController?.dispose();
+    articlePriceController?.dispose();
+    articleCodeController?.dispose();
+    articleUnitController?.dispose();
+    articleImageController?.dispose();
+  }
+
   void addToDataBaseCaller() async{
     LoadingIndicator.showLoadingIndicator(context, "Création de l'article est en cours");
     await addToDataBase();
@@ -227,11 +238,12 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
                 controller: articleNameController,
               ),
               const SizedBox(height: columnSpace),
+              /*
               OutlineTextField(
                 labelText: 'Lien de l\'image',
                 validationFunc: null,
                 controller: articleImageController,
-              ),
+              ),*/
               const SizedBox(height: columnSpace),
               Row(
                 children: [

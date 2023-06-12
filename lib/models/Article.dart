@@ -16,7 +16,8 @@ class Article {
     this.picture = "",
     this.price = 0.0,
     this.unit="Pce",
-  required this.articleCode});
+    required this.articleCode
+  });
 
   Article.fromJson(MapEntry<String, dynamic> json):
     id = json.key,

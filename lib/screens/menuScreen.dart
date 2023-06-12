@@ -20,40 +20,42 @@ class MenuScreen extends StatelessWidget {
           CartAppBar(),
         ],
       ),
-      body: const Column(
-        children: [
-          MenuItem(
-            title : "Gérer les articles",
-            toScreen : ListOfArticles(),
-            color : Colors.lightBlueAccent,
-            assetLogo: 'assets/images/product.png',
-          ),
-          MenuItem(
-            title : "Gérer les Clients",
-            toScreen : ListOfCustomersScreen(),
-            color : Colors.lime,
-            assetLogo: 'assets/images/people.png',
-          ),
-          MenuItem(
-            title : "Créer une commande",
-            toScreen : ChooseCustomerScreen(),
-            color : Colors.greenAccent,
-            assetLogo: 'assets/images/order_delivery.png',
-          ),
-          MenuItem(
-            title : "Confirmer une commande",
-            toScreen: ListOfOrdersScreen(),
-            //toScreen : ListOfArticles(),
-            color : Colors.redAccent,
-            assetLogo: 'assets/images/checkout.png',
-          ),
-          MenuItem(
-            title : "Livrer une commande",
-            toScreen : ListOfDeliverOrdersScreen(),
-            color : Colors.blueGrey,
-            assetLogo: 'assets/images/shipped.png',
-          ),
-        ],
+      body: const SingleChildScrollView(
+        child: Column(
+          children: [
+            MenuItem(
+              title : "Gérer les articles",
+              toScreen : ListOfArticles(),
+              color : Colors.lightBlueAccent,
+              assetLogo: 'assets/images/product.png',
+            ),
+            MenuItem(
+              title : "Gérer les Clients",
+              toScreen : ListOfCustomersScreen(),
+              color : Colors.lime,
+              assetLogo: 'assets/images/people.png',
+            ),
+            MenuItem(
+              title : "Créer une commande",
+              toScreen : ChooseCustomerScreen(),
+              color : Colors.greenAccent,
+              assetLogo: 'assets/images/order_delivery.png',
+            ),
+            MenuItem(
+              title : "Confirmer une commande",
+              toScreen: ListOfOrdersScreen(),
+              //toScreen : ListOfArticles(),
+              color : Colors.redAccent,
+              assetLogo: 'assets/images/checkout.png',
+            ),
+            MenuItem(
+              title : "Livrer une commande",
+              toScreen : ListOfDeliverOrdersScreen(),
+              color : Colors.blueGrey,
+              assetLogo: 'assets/images/shipped.png',
+            ),
+          ],
+        ),
       ),
     );
   }

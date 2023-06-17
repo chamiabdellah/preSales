@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class LoadingIndicator {
-
   static void showLoadingIndicator(BuildContext context, String text) {
     showDialog(
       context: context,
@@ -9,14 +8,22 @@ class LoadingIndicator {
       builder: (BuildContext context) {
         return WillPopScope(
             onWillPop: () async => false,
-            child: const AlertDialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0))
-              ),
+            child: AlertDialog(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0))),
               backgroundColor: Colors.black87,
-              content: CircularProgressIndicator(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Center(child: CircularProgressIndicator()),
+                  const SizedBox(height: 10,),
+                  Text(
+                    '$text...',
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ],
               ),
-            )
+            ),
         );
       },
     );
@@ -25,5 +32,4 @@ class LoadingIndicator {
   static void hideLoadingIndicator(BuildContext context) {
     Navigator.of(context).pop();
   }
-
 }

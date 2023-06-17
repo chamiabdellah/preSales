@@ -30,6 +30,7 @@ class _ScanArticleScreenState extends ConsumerState<ScanArticleScreen> {
     if(barcodeScanRes == "-1"){
       // the user clicked on cancel => pop the screen.
       Navigator.pop(context);
+      return;
     }
     // get the article by code :
     final article = await ref

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/providers/list_of_confirm_orders.dart';
 import 'package:proj1/widgets/confirmOrders/orderList.dart';
+import 'package:proj1/widgets/emptyListInfo.dart';
 
 import '../../models/order.dart';
 
@@ -17,7 +18,7 @@ class _ListOfOrdersScreenState extends ConsumerState<ListOfOrdersScreen> {
   bool isLoading = false;
   bool failedLoading = false;
 
-  void loadConfirmOrder() async {
+  void fetchConfirmOrder() async {
     setState(() {
       isLoading = true;
     });
@@ -37,7 +38,7 @@ class _ListOfOrdersScreenState extends ConsumerState<ListOfOrdersScreen> {
   @override
   void initState() {
     super.initState();
-    loadConfirmOrder();
+    fetchConfirmOrder();
   }
 
   @override
@@ -49,7 +50,8 @@ class _ListOfOrdersScreenState extends ConsumerState<ListOfOrdersScreen> {
         title: const Text("Liste des commandes"),
       ),
       body: isLoading ? const Center(child: CircularProgressIndicator(),) :
-      listOrders.isEmpty ? const Center(child : Text("aucune commande trouvée")) :
+      listOrders.isEmpty ? const EmptyList(message: "aucune commande trouvée") :
+      failedLoading ? const EmptyList(message: "Impossible de récuperer les commandes !!!") :
       ListView.builder(
         itemCount:  listOrders.length,
           itemBuilder: (context, index) {

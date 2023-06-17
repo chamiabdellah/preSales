@@ -12,6 +12,7 @@ class GeoUtil{
     if (!serviceEnabled && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Localisation est désactivé sur votre téléphone.')));
+      await Geolocator.openLocationSettings();
       return false;
     }
 

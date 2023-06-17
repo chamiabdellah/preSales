@@ -57,7 +57,7 @@ class Order{
       id = json.key,
       creationDate = DateTime.tryParse(json.value['creationDate'] ?? ""),
       customer = Customer.fromJson(MapEntry("", (json.value['customer'] as Map<String, dynamic>))),
-      listOrderLines = json.value['listOrderLines'].map((orderLine) => OrderLine.fromJson(MapEntry("", (orderLine as Map<String, dynamic>)))).toList().cast<OrderLine>(),
+      listOrderLines = json.value['listOrderLines']?.map((orderLine) => OrderLine.fromJson(MapEntry("", (orderLine as Map<String, dynamic>)))).toList().cast<OrderLine>() ?? [],
       totalCost = json.value['totalCost'],
       totalDiscount = json.value['totalDiscount'],
       confirmationDate = DateTime.tryParse(json.value['confirmationDate']??""),

@@ -11,8 +11,6 @@ import 'package:proj1/utils/LoadingIndicator.dart';
 import 'package:proj1/utils/ValidationLib.dart';
 import 'package:proj1/widgets/OutlineTextField.dart';
 import 'package:http/http.dart' as http;
-//import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
-
 import '../providers/list_of_articles_provider.dart';
 import '../utils/Paths.dart';
 import '../widgets/PickImageCamera.dart';
@@ -211,6 +209,7 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
   }
 
   Future<String> uploadImage() async {
+    //File compressedImage = FlutterNativeImage.compressImage()
     Reference storageRef = FirebaseStorage.instance
         .ref()
         .child('article_images')

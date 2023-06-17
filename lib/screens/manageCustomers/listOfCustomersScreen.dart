@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/providers/list_of_customers_provider.dart';
 import 'package:proj1/screens/manageCustomers/addCustomerScreen.dart';
 import 'package:proj1/widgets/customerList.dart';
+import 'package:proj1/widgets/emptyListInfo.dart';
 
 import '../../models/customer.dart';
 
@@ -16,26 +17,30 @@ class ListOfCustomersScreen extends ConsumerStatefulWidget {
 class _ListOfCustomersScreenState extends ConsumerState<ListOfCustomersScreen> {
 
   List<Customer> listCustomers = [];
-  bool isLoading = false;
+  bool isLoading = true;
   bool failed = true;
 
-  @override
-  void initState() {
-    super.initState();
+  void fetchCustomers() async {
     setState(() {
       isLoading = true;
     });
     try{
-      ref.read(listOfCustomersProvider.notifier).initListFromDb();
+      await ref.read(listOfCustomersProvider.notifier).initListFromDb();
+      setState(() {
+        isLoading = false;
+      });
     } catch(e){
-       setState(() {
-         isLoading = false;
-         failed = true;
-       });
+      setState(() {
+        isLoading = false;
+        failed = true;
+      });
     }
-    setState(() {
-      isLoading = false;
-    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCustomers();
   }
 
   @override
@@ -60,8 +65,8 @@ class _ListOfCustomersScreenState extends ConsumerState<ListOfCustomersScreen> {
         ],
         title: const Text("Liste des clients"),
       ),
-      body: isLoading ? const Center(child:CircularProgressIndicator()):
-      listCustomers.isEmpty ? const Center(child : Text("Aucun client")) :
+      body: isLoading ? const Center(child:CircularProgressIndicator()) :
+      listCustomers.isEmpty ? const EmptyList( message: "Aucun client") :
       ListView.builder(
         itemCount: listCustomers.length,
         itemBuilder: (context, index) {

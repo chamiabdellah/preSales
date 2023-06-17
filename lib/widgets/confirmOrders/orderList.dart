@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:proj1/screens/confirmOrders/orderDetailsScreen.dart';
 import 'package:proj1/utils/Formaters.dart';
 
@@ -27,7 +28,7 @@ class OrderList extends StatelessWidget {
                     children: [
                       Text(order.orderNumber ?? "NaN"),
                       Text(order.customer.name),
-                      Text("${order.creationDate}"),
+                      Text(DateFormat.yMMMMEEEEd('fr_FR').format(order.creationDate!).toString()),
                     ],
                   ),
                 ),
@@ -36,7 +37,7 @@ class OrderList extends StatelessWidget {
                 flex: 10,
                 child: Column(
                   children: [
-                    Text('Total à payer : ${order.totalCost.spaceSeparateNumbers()} DH'),
+                    Text('Total à payer : ${order.totalCost.toMonetaryString()} DH'),
                   ],
                 ),
               ),

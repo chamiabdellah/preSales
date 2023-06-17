@@ -4,15 +4,15 @@ import 'package:proj1/models/Article.dart';
 import 'package:proj1/providers/order_provider.dart';
 import 'package:proj1/screens/createOrder/confirmOrderScreen.dart';
 import 'package:proj1/screens/createOrder/scanArticleScreen.dart';
-import 'package:proj1/utils/ValidationLib.dart';
 import 'package:proj1/widgets/articleList.dart';
 import 'package:proj1/widgets/largeButton.dart';
+import 'package:proj1/widgets/quantityForm.dart';
 
 import '../../widgets/cartAppBar.dart';
 import '../manageArticles/addArticleScreen.dart';
 
 class SetArticleQuantity extends ConsumerStatefulWidget {
-  const SetArticleQuantity({Key? key,required this.article}) : super(key: key);
+  const SetArticleQuantity({Key? key, required this.article}) : super(key: key);
 
   final Article article;
 
@@ -21,9 +21,6 @@ class SetArticleQuantity extends ConsumerStatefulWidget {
 }
 
 class _SetArticleQuantityState extends ConsumerState<SetArticleQuantity> {
-  final _productFormKey = GlobalKey<FormState>();
-  TextEditingController? articleQuantityController = TextEditingController();
-
   double chosenQuantity = 0;
 
   @override
@@ -34,43 +31,29 @@ class _SetArticleQuantityState extends ConsumerState<SetArticleQuantity> {
   @override
   void dispose() {
     super.dispose();
-    articleQuantityController!.dispose();
   }
 
-  void incrementQuantity(){
-    articleQuantityController!.text = (chosenQuantity+1).toString();
+  void setQuantity(double newQuantity) {
     setState(() {
-      chosenQuantity++;
+      chosenQuantity = newQuantity;
     });
   }
 
-  void decrementQuantity(){
-    if(chosenQuantity > 0) {
-      articleQuantityController!.text = (chosenQuantity - 1).toString();
-      setState(() {
-        chosenQuantity--;
-      });
-    }
+  void _createNewOrderLine() {
+    ref.read(orderProvider.notifier).addOrderLine(
+        article: widget.article, quantity: chosenQuantity, discount: 0);
   }
 
-  void _createNewOrderLine(){
-    ref.read(orderProvider.notifier).addOrderLine(article:  widget.article, quantity:  chosenQuantity, discount:  0);
-  }
-
-  void updatePrice(String? newQtty){
-    setState(() {
-      chosenQuantity = double.parse(newQtty ?? "0");
-    });
-  }
-
-  void validateQuantity(){
+  void validateQuantity() {
     _createNewOrderLine();
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) => const ConfirmOrderScreen()));
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (ctx) => const ConfirmOrderScreen()));
   }
 
-  void addNewLine(){
+  void addNewLine() {
     _createNewOrderLine();
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => const ScanArticleScreen()));
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (ctx) => const ScanArticleScreen()));
   }
 
   @override
@@ -85,61 +68,42 @@ class _SetArticleQuantityState extends ConsumerState<SetArticleQuantity> {
       body: Stack(
         children: [
           Column(
-              children: [
-                ArticleList(
-                  article: widget.article,
-                  onClick: ()=> Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (ctx) => AddArticleScreen(baseArticle: widget.article)),
-                  ),
+            children: [
+              ArticleList(
+                showArticlePrice: true,
+                article: widget.article,
+                onClick: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (ctx) =>
+                          AddArticleScreen(baseArticle: widget.article)),
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Text('Prix unitaire : ${widget.article.price} DH'),
-                const SizedBox(
-                  height: 15,
-                ),
-                Form(
-                  key: _productFormKey,
-                  child: Row(
-                    children: [
-                      const Text("Quantité "),
-                      TextButton(
-                        onPressed: decrementQuantity,
-                        child: const Text("-"),
-                      ),
-                      SizedBox(
-                        width: 70,
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          validator: ValidationLib.nonEmptyField,
-                          controller: articleQuantityController,
-                          onChanged: updatePrice,
-                          autofocus: true,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: incrementQuantity,
-                        child: const Text("+"),
-                      ),
-                      Text(widget.article.unit),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 15,),
-                Text('Total : ${widget.article.price * chosenQuantity} DH'),
-              ],
-            ),
-
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              QuantityForm(
+                articlePrice: widget.article.price,
+                setQuantity: setQuantity,
+                autoFocus: true,
+              ),
+            ],
+          ),
           Positioned(
-            bottom : 0,
+            bottom: 0,
             child: Column(
-                children: [
-                  LargeButton(label: "Ajouter", color: Colors.greenAccent, onClick: addNewLine,),
-                  const SizedBox(height: 8),
-                  LargeButton(label: "Valider", color: Colors.pinkAccent, onClick: validateQuantity,),
+              children: [
+                LargeButton(
+                  label: "Ajouter",
+                  color: Colors.greenAccent,
+                  onClick: addNewLine,
+                ),
+                const SizedBox(height: 8),
+                LargeButton(
+                  label: "Valider",
+                  color: Colors.pinkAccent,
+                  onClick: validateQuantity,
+                ),
               ],
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:proj1/providers/list_of_deliv_orders.dart';
 
 import '../../models/order.dart';
@@ -17,12 +18,13 @@ class _ListOfDeliverOrdersScreenState extends ConsumerState<ListOfDeliverOrdersS
   bool isLoading = false;
   bool failedLoading = false;
 
-  void loadDelivOrders() async {
+  void loadDeliveryOrders() async {
     setState(() {
       isLoading = true;
     });
     try{
-      ref.read(listOfDeliverOrdersProvider.notifier).initOrdersListFromDb();
+      await ref.read(listOfDeliverOrdersProvider.notifier).initOrdersListFromDb();
+      await initializeDateFormatting('fr_FR');
     } catch(e){
       setState(() {
         isLoading = false;
@@ -37,7 +39,7 @@ class _ListOfDeliverOrdersScreenState extends ConsumerState<ListOfDeliverOrdersS
   @override
   void initState() {
     super.initState();
-    loadDelivOrders();
+    loadDeliveryOrders();
   }
 
   @override
@@ -48,8 +50,7 @@ class _ListOfDeliverOrdersScreenState extends ConsumerState<ListOfDeliverOrdersS
       appBar: AppBar(
         title: const Text("Scannez l\'article"),
       ),
-      body: isLoading ?
-      const Center(child: CircularProgressIndicator(),) :
+      body: isLoading ? const Center(child: CircularProgressIndicator(),) :
       listOrders.isEmpty ? const Center(child : Text("aucune commande trouvée")) :
       ListView.builder(
           itemCount:  listOrders.length,

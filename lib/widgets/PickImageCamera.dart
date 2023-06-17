@@ -20,7 +20,7 @@ class _ImagePickerState extends State<PickImageCamera> {
 
   void takePicture() async {
     ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+    final XFile? image = await picker.pickImage(source: ImageSource.camera, imageQuality: 10);
     if (image != null) {
       setState(() {
         imageFile = File(image.path);

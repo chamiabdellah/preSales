@@ -1,20 +1,19 @@
-
-
 import 'package:flutter/material.dart';
-import 'package:proj1/models/Article.dart';
 
 import '../utils/Formaters.dart';
-import '../utils/ValidationLib.dart';
 
 class QuantityForm extends StatefulWidget {
   const QuantityForm({Key? key,
-    required this.article,
+    required this.articlePrice,
     required this.setQuantity,
-    required this.initQuantity}) : super(key: key);
+    this.initQuantity,
+    this.autoFocus = false,
+  }) : super(key: key);
 
-  final Article article;
+  final double articlePrice;
   final Function(double)? setQuantity;
-  final double initQuantity;
+  final double? initQuantity;
+  final bool autoFocus;
 
   @override
   State<QuantityForm> createState() => _QuantityFormState();
@@ -28,8 +27,10 @@ class _QuantityFormState extends State<QuantityForm> {
   @override
   void initState() {
     super.initState();
-    articleQuantityController!.text = widget.initQuantity.toString();
-    chosenQuantity = widget.initQuantity;
+    chosenQuantity = widget.initQuantity ?? 0;
+    if(widget.initQuantity != null) {
+      articleQuantityController!.text = widget.initQuantity!.toStringAsFixed(0);
+    }
   }
 
   @override
@@ -40,7 +41,7 @@ class _QuantityFormState extends State<QuantityForm> {
 
   void decrementQuantity(){
     if(chosenQuantity > 0) {
-      articleQuantityController!.text = (chosenQuantity - 1).toString();
+      articleQuantityController!.text = (chosenQuantity - 1).toStringAsFixed(0);
 
         chosenQuantity--;
         widget.setQuantity!(chosenQuantity);
@@ -49,15 +50,19 @@ class _QuantityFormState extends State<QuantityForm> {
   }
 
   void incrementQuantity(){
-    articleQuantityController!.text = (chosenQuantity+1).toString();
+    articleQuantityController!.text = (chosenQuantity+1).toStringAsFixed(0);
 
       chosenQuantity++;
       widget.setQuantity!(chosenQuantity);
   }
 
   void updatePrice(String? newQtty){
-      chosenQuantity = double.parse(newQtty ?? "0");
-      widget.setQuantity!(chosenQuantity);
+    double? quantityDouble = double.tryParse(newQtty ?? "0");
+    if(quantityDouble != null && quantityDouble < 0 ){
+      quantityDouble = 0;
+    }
+    chosenQuantity = quantityDouble ?? 0;
+    widget.setQuantity!(chosenQuantity);
   }
 
   @override
@@ -83,15 +88,15 @@ class _QuantityFormState extends State<QuantityForm> {
                 SizedBox(
                   width: 90,
                   child: TextFormField(
+                    autofocus: widget.autoFocus,
                     style: const TextStyle(fontSize: 20,),
                     textAlign: TextAlign.center,
                     keyboardType: TextInputType.number,
-                    validator: ValidationLib.nonEmptyField,
                     controller: articleQuantityController,
                     onChanged: updatePrice,
                     onTap: () => articleQuantityController?.selection = TextSelection(baseOffset: 0, extentOffset: articleQuantityController!.value.text.length),
                     decoration: const InputDecoration(fillColor: Color.fromRGBO(
-                        160, 177, 222, 0.4),
+                        160, 177, 222, 0.2),
                     filled: true),
                   ),
                 ),
@@ -106,7 +111,7 @@ class _QuantityFormState extends State<QuantityForm> {
                 Expanded(
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text('${Formater.spaceSeparateNumbers('${widget.article.price * chosenQuantity}')} DH',
+                    child: Text('${((widget.articlePrice * chosenQuantity).toMonetaryString())} DH',
                     style: const TextStyle(fontSize: 25 , fontWeight: FontWeight.w700),
                     ),
                   ),

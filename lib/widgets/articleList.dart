@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/Article.dart';
+import 'package:proj1/utils/Formaters.dart';
 
 import 'imageNetworkCached.dart';
 
@@ -33,7 +34,7 @@ class ArticleList extends ConsumerWidget {
           title: Text(article.name),
           subtitle: Text(article.unit),
           trailing: showArticlePrice ?
-            Text('${article.price} DH', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300),)
+            Text('${article.price.toMonetaryString()} DH', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300),)
           : onDelete != null
               ? InkWell(
                   onTap: onDelete,

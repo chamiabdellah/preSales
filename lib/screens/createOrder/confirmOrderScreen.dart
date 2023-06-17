@@ -8,6 +8,7 @@ import 'package:proj1/screens/createOrder/orderRecapScreen.dart';
 import 'package:proj1/screens/createOrder/scanArticleScreen.dart';
 import 'package:proj1/utils/Formaters.dart';
 import 'package:proj1/utils/LoadingIndicator.dart';
+import 'package:proj1/widgets/emptyListInfo.dart';
 import 'package:proj1/widgets/largeButton.dart';
 import 'package:proj1/widgets/quantityForm.dart';
 
@@ -75,7 +76,7 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
   Widget build(BuildContext context) {
     order = ref.watch(orderProvider);
 
-    final List<OrderLine> orderLines = order!.listOrderLines;
+    final List<OrderLine> orderLines = order?.listOrderLines ?? [];
 
     return Scaffold(
       appBar: AppBar(
@@ -83,10 +84,10 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
         actions: [
           InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (ctx) => const ScanArticleScreen())).then(
-                      (value) => {
+              Navigator.push(context, MaterialPageRoute(builder: (ctx) => const ScanArticleScreen()));
+              /*.then((value) => {
                         Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst)
-                      });
+                      });*/
             },
             child: const Padding(
               padding: EdgeInsets.only(right: 20.0),
@@ -111,13 +112,16 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
                 ),
                 child: Text(
                   textAlign: TextAlign.center,
-                  'Total : ${Formater.spaceSeparateNumbers('${order!.calculateTotalCost()}')} DH',
+                  'Total : ${order?.calculateTotalCost().toMonetaryString() ?? 0} DH',
                   style: const TextStyle(
                       fontSize: 30, color: Color.fromRGBO(213, 82, 105, 1.0)),
                 ),
               ),
               Flexible(
-                child: ListView.builder(
+                child:
+                orderLines.isEmpty ?
+                const EmptyList(message: "Ajoutez une ligne à la commande")
+                : ListView.builder(
                   itemCount: orderLines.length,
                   itemBuilder: (context, index) {
                     return Column(
@@ -129,7 +133,6 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
                               flex: 10,
                               child: ArticleList(
                                 article: orderLines[index].article,
-                                //onDelete: ()=> deleteOrderLineFromOrder(orderLines[index]),
                                 showArticlePrice: true,
                               ),
                             ),
@@ -147,7 +150,7 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
                           padding: const EdgeInsets.only(top: 3),
                           height: 70,
                           child: QuantityForm(
-                            article: orderLines[index].article,
+                            articlePrice: orderLines[index].article.price,
                             initQuantity: orderLines[index].quantity,
                             setQuantity: (qtt) =>
                                 setOrderLineQuantity(orderLines[index], qtt),
@@ -161,7 +164,7 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
               LargeButton(
                 label: "Confirmer",
                 color: const Color.fromRGBO(23, 2, 32, 2),
-                onClick: createOrder,
+                onClick: orderLines.isEmpty ? null : createOrder,
               ),
             ],
           ),

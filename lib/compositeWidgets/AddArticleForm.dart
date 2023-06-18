@@ -11,6 +11,8 @@ import 'package:proj1/utils/LoadingIndicator.dart';
 import 'package:proj1/utils/ValidationLib.dart';
 import 'package:proj1/widgets/OutlineTextField.dart';
 import 'package:http/http.dart' as http;
+import 'package:proj1/widgets/addArticleForm/setArticleUnit.dart';
+import '../models/unit.dart';
 import '../providers/list_of_articles_provider.dart';
 import '../utils/Paths.dart';
 import '../widgets/PickImageCamera.dart';
@@ -35,11 +37,14 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
   TextEditingController? articleCodeController = TextEditingController();
   TextEditingController? articleUnitController = TextEditingController();
   TextEditingController? articleImageController = TextEditingController();
+  TextEditingController? articleUnitTextController = TextEditingController();
 
   bool? isNewCode = true;
   bool isAddMode = true;
 
   File? _articleImage;
+
+  Unit? selectedUnit;
 
   void setArticleImage(File imageFile) {
     setState(() {
@@ -56,7 +61,8 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
       articleQuantityController!.text = widget.baseArticle!.quantity.toString();
       articlePriceController!.text = widget.baseArticle!.price.toString();
       articleCodeController!.text = widget.baseArticle!.articleCode;
-      articleUnitController!.text = widget.baseArticle!.unit;
+      selectedUnit = Unit.fromString(widget.baseArticle!.unit);
+      articleUnitController!.text = selectedUnit?.toReadableFormat() ?? '';
       articleImageController!.text = widget.baseArticle!.picture;
     }
   }
@@ -72,19 +78,20 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
     articleImageController?.dispose();
   }
 
-  void addToDataBaseCaller() async{
-    LoadingIndicator.showLoadingIndicator(context, "Création de l'article est en cours");
+  void addToDataBaseCaller() async {
+    LoadingIndicator.showLoadingIndicator(
+        context, isAddMode ? "Création de l'article est en cours" : "Modification de l'article est en cours");
     await addToDataBase();
-    if(mounted) {
+    if (mounted) {
       LoadingIndicator.hideLoadingIndicator(context);
     }
   }
 
   Future<void> addToDataBase() async {
-    if (_productFormKey.currentState == null || (_articleImage == null && isAddMode)) {
+    if (_productFormKey.currentState == null ||
+        (_articleImage == null && isAddMode)) {
       return;
     }
-
     // 1- validate the fields.
     if (_productFormKey.currentState!.validate()) {
       final String articleCode = articleCodeController!.value.text;
@@ -98,7 +105,7 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
       }
 
       String imagePath;
-      if(_articleImage != null) {
+      if (_articleImage != null) {
         // upload the image to the firestore
         imagePath = await uploadImage();
       } else {
@@ -122,7 +129,8 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
         'image': imagePath,
         'price': double.parse(articlePriceController!.value.text),
         'quantity': double.parse(articleQuantityController!.value.text),
-        'unit': articleUnitController!.value.text,
+        //'unit': articleUnitController!.value.text,
+        'unit' : selectedUnit.toString(),
       };
 
       // 3 - send the request to the db
@@ -162,7 +170,7 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
           picture: imagePath,
           price: double.parse(articlePriceController!.value.text),
           quantity: double.parse(articleQuantityController!.value.text),
-          unit: articleUnitController!.value.text,
+          unit: selectedUnit.toString(),
           id: isAddMode ? extractedData['name'] : widget.baseArticle!.id,
         );
 
@@ -213,7 +221,8 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
     Reference storageRef = FirebaseStorage.instance
         .ref()
         .child('article_images')
-        .child('${articleCodeController!.value.text}${articleNameController!.value.text}.jpeg');
+        .child(
+            '${articleCodeController!.value.text}${articleNameController!.value.text}.jpeg');
     await storageRef.putFile(_articleImage!);
 
     return storageRef.getDownloadURL();
@@ -256,11 +265,12 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
                     ),
                   ),
                   Flexible(
-                    flex: 1,
-                    child: OutlineTextField(
-                      labelText: 'Unité',
-                      validationFunc: ValidationLib.nonEmptyField,
-                      controller: articleUnitController,
+                    child: SetArticleUnit(
+                      baseUnit: selectedUnit,
+                        articleUnitController: articleUnitController!,
+                        setUnit : (unit) => setState((){
+                          selectedUnit = unit;
+                        }),
                     ),
                   ),
                 ],

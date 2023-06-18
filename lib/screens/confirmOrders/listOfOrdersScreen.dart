@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:proj1/providers/list_of_confirm_orders.dart';
 import 'package:proj1/widgets/confirmOrders/orderList.dart';
 import 'package:proj1/widgets/emptyListInfo.dart';
@@ -24,6 +25,7 @@ class _ListOfOrdersScreenState extends ConsumerState<ListOfOrdersScreen> {
     });
     try{
       await ref.read(listOfConfirmOrdersProvider.notifier).initOrdersListFromDb();
+      await initializeDateFormatting('fr_FR');
     } catch(e){
       setState(() {
         isLoading = false;

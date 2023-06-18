@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:proj1/models/unit.dart';
+
 import 'Paths.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,6 +12,16 @@ class ValidationLib{
   static String? nonEmptyField(value) {
     if (value == null || value!.isEmpty) {
       return 'Ce champ est obligatoir';
+    }
+    return null;
+  }
+
+  static String? isValidUnit(Unit? unit){
+    if (unit == null) {
+      return 'Ce champ est obligatoir';
+    }
+    if(double.tryParse(unit.portion ?? '') == null){
+      return 'Quantité Invalide';
     }
     return null;
   }

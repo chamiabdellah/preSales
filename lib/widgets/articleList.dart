@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/Article.dart';
 import 'package:proj1/utils/Formaters.dart';
 
+import '../models/unit.dart';
 import 'imageNetworkCached.dart';
 
 class ArticleList extends ConsumerWidget {
@@ -32,7 +33,7 @@ class ArticleList extends ConsumerWidget {
             width: 60,
               child: ImageNetworkCached(imageUrl: article.picture)),
           title: Text(article.name),
-          subtitle: Text(article.unit),
+          subtitle: Text(Unit.toReadableUnit(article.unit)),
           trailing: showArticlePrice ?
             Text('${article.price.toMonetaryString()} DH', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300),)
           : onDelete != null

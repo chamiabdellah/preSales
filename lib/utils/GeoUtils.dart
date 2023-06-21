@@ -5,16 +5,7 @@ import 'package:geolocator/geolocator.dart';
 class GeoUtil{
 
   static Future<bool> handleLocationPermission(BuildContext context) async {
-    bool serviceEnabled;
     LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Localisation est désactivé sur votre téléphone.')));
-      await Geolocator.openLocationSettings();
-      return false;
-    }
 
     permission = await Geolocator.checkPermission();
 
@@ -37,13 +28,13 @@ class GeoUtil{
     return true;
   }
 
-  static Future<Position> getUserLocation(BuildContext context) async {
+  static Future<Position?> getUserLocation(BuildContext context) async {
     bool isPermitted = await GeoUtil.handleLocationPermission(context);
 
     if(isPermitted) {
-      return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+      return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best, timeLimit: const Duration(seconds: 30));
     } else {
-      throw Exception('impossible de déterminer votre localisation');
+      return null;
     }
   }
 

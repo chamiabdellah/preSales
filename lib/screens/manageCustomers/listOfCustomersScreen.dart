@@ -66,7 +66,7 @@ class _ListOfCustomersScreenState extends ConsumerState<ListOfCustomersScreen> {
         title: const Text("Liste des clients"),
       ),
       body: isLoading ? const Center(child:CircularProgressIndicator()) :
-      listCustomers.isEmpty ? const EmptyList( message: "Aucun client") :
+      listCustomers.isEmpty ? const EmptyListInfo( message: "Aucun client") :
       ListView.builder(
         itemCount: listCustomers.length,
         itemBuilder: (context, index) {

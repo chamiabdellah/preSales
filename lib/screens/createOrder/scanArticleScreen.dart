@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/Article.dart';
 import 'package:proj1/providers/list_of_articles_provider.dart';
 import 'package:proj1/screens/createOrder/setArticleQuatityScreen.dart';
+import 'package:proj1/utils/DialogMessagesLib.dart';
 
 class ScanArticleScreen extends ConsumerStatefulWidget {
   const ScanArticleScreen({Key? key}) : super(key: key);
@@ -48,11 +49,18 @@ class _ScanArticleScreenState extends ConsumerState<ScanArticleScreen> {
     }
   }
 
+  void showInfoToUser(){
+    showDialog(context: context, builder: (ctx){
+      return DialogMessagesLib.requestToScanAnArticle;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     readBarCode();
   }
+
 
   @override
   Widget build(BuildContext context) {

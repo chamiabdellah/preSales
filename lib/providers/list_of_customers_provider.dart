@@ -109,6 +109,13 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
                                                     customer.latitude, customer.longitude) < distance + accuracy;
     }).toList();
   }
+
+  Future<List<Customer>> getAllCustomers() async{
+    if(state.isEmpty){
+      await initListFromDb();
+    }
+    return state;
+  }
 }
 
 final listOfCustomersProvider = StateNotifierProvider<ListOfCustomersNotifier, List<Customer>>((ref){

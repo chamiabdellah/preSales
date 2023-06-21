@@ -41,7 +41,9 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
 
     try{
       if(!mounted) return;
-      Position currentPosition = await GeoUtil.getUserLocation(context);
+      Position? currentPosition = await GeoUtil.getUserLocation(context);
+      if(currentPosition == null) return ;
+
       getAddressFromLocation(currentPosition);
 
       setState(() {

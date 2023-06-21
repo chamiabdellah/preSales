@@ -120,7 +120,7 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
               Flexible(
                 child:
                 orderLines.isEmpty ?
-                const EmptyList(message: "Ajoutez une ligne à la commande")
+                const EmptyListInfo(message: "Ajoutez une ligne à la commande")
                 : ListView.builder(
                   itemCount: orderLines.length,
                   itemBuilder: (context, index) {

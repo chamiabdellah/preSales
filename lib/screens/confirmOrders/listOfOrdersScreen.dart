@@ -52,8 +52,8 @@ class _ListOfOrdersScreenState extends ConsumerState<ListOfOrdersScreen> {
         title: const Text("Liste des commandes"),
       ),
       body: isLoading ? const Center(child: CircularProgressIndicator(),) :
-      listOrders.isEmpty ? const EmptyList(message: "aucune commande trouvée") :
-      failedLoading ? const EmptyList(message: "Impossible de récuperer les commandes !!!") :
+      listOrders.isEmpty ? const EmptyListInfo(message: "aucune commande trouvée") :
+      failedLoading ? const EmptyListInfo(message: "Impossible de récuperer les commandes !!!") :
       ListView.builder(
         itemCount:  listOrders.length,
           itemBuilder: (context, index) {

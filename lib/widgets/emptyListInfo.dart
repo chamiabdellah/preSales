@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class EmptyList extends StatelessWidget {
-  const EmptyList({Key? key, required this.message}) : super(key: key);
+class EmptyListInfo extends StatelessWidget {
+  const EmptyListInfo({Key? key, required this.message}) : super(key: key);
 
   final String message;
 

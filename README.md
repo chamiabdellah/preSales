@@ -1,6 +1,6 @@
-# proj1
+# Pre-Sales app
 
-A new Flutter project.
+A new Flutter project to manage grocery sales to multiple stores in a time and effort efficient manner.
 
 ## Getting Started
 

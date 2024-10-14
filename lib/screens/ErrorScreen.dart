@@ -9,7 +9,7 @@ class ErrorScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Choisissez le client"),
       ),
-      body: const Text("Erreur innatendut => Reporter l'erreur"),
+      body: const Text("Erreur unexpected => Reporter l'erreur"),
     );
   }
 }

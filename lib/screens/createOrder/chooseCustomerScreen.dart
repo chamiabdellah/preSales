@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:proj1/providers/list_of_customers_provider.dart';
 import 'package:proj1/providers/order_provider.dart';
+import 'package:proj1/screens/createOrder/SearchOrScanArticle.dart';
 import 'package:proj1/screens/createOrder/scanArticleScreen.dart';
 import 'package:proj1/utils/GeoUtils.dart';
 import 'package:proj1/widgets/emptyListInfo.dart';
@@ -61,7 +62,7 @@ class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
   void onSelectedCustomer(Customer customer){
     ref.read(orderProvider.notifier).createOrder(customer);
     // navigate to the next screen after choosing the customer
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => const ScanArticleScreen()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => const SearchOrScanArticle()));
   }
 
   void filterCustomerByName(String name){

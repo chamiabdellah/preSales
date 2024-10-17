@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proj1/screens/confirmOrders/listOfOrdersScreen.dart';
-import 'package:proj1/screens/createOrder/chooseCustomerScreen.dart';
+import 'package:proj1/screens/createOrder/searchCustomerScreen.dart';
 import 'package:proj1/screens/deliverOrder/listOfDeliverOrdersScreen.dart';
 import 'package:proj1/screens/manageCustomers/listOfCustomersScreen.dart';
 
@@ -37,7 +37,7 @@ class MenuScreen extends StatelessWidget {
             ),
             MenuItem(
               title : "Créer une commande",
-              toScreen : ChooseCustomerScreen(),
+              toScreen : SearchCustomerScreen(),
               color : Colors.greenAccent,
               assetLogo: 'assets/images/order_delivery.png',
             ),

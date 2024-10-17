@@ -26,6 +26,32 @@ class ListOfArticlesNotifier extends StateNotifier<List<Article>>{
     return state.firstWhere((element) => element.articleCode == code);
   }
 
+  Future<List<Article>> fetchArticles() async {
+    String link = Paths.articlePath;
+    Uri uri = Uri.parse(link);
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final List<Article> loadedItems = [];
+      extractedData.forEach((key, value) {
+        loadedItems.add(Article(
+          name: value['articleName'],
+          articleCode: value['articleCode'],
+          unit: value['unit'],
+          quantity: value['quantity'].toDouble(),
+          price: value['price'].toDouble(),
+          picture: value['image'],
+          id: key,
+        ));
+      });
+      state = loadedItems;
+      return loadedItems;
+    } else {
+      throw Exception("error during fetching the articles");
+    }
+  }
+
   Future<Article?> getArticleByCodeDB(String articleCode) async {
     try{
       final url = Uri.parse(Paths.getArticleByCodePath(articleCode));

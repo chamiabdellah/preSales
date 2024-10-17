@@ -141,11 +141,6 @@ class _ListOfArticlesState extends ConsumerState<ListOfArticles> {
           );
         },
       ),
-      /*floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),*/
     );
   }
 }

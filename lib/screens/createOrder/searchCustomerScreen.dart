@@ -4,21 +4,20 @@ import 'package:geolocator/geolocator.dart';
 import 'package:proj1/providers/list_of_customers_provider.dart';
 import 'package:proj1/providers/order_provider.dart';
 import 'package:proj1/screens/createOrder/SearchOrScanArticle.dart';
-import 'package:proj1/screens/createOrder/scanArticleScreen.dart';
 import 'package:proj1/utils/GeoUtils.dart';
 import 'package:proj1/widgets/emptyListInfo.dart';
 
 import '../../models/customer.dart';
 import '../../widgets/customerList.dart';
 
-class ChooseCustomerScreen extends ConsumerStatefulWidget {
-  const ChooseCustomerScreen({Key? key}) : super(key: key);
+class SearchCustomerScreen extends ConsumerStatefulWidget {
+  const SearchCustomerScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ChooseCustomerScreen> createState() => _ChooseCustomerScreenState();
+  ConsumerState<SearchCustomerScreen> createState() => _SearchCustomerScreenState();
 }
 
-class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
+class _SearchCustomerScreenState extends ConsumerState<SearchCustomerScreen> {
 
   List<Customer> customersList = [];
   List<Customer> filteredCustomersList = [];
@@ -117,9 +116,9 @@ class _ChooseCustomerScreenState extends ConsumerState<ChooseCustomerScreen> {
                 child: SearchBar(
                   leading: const Icon(Icons.search),
                   hintText: "Chercher un client",
-                  hintStyle: const MaterialStatePropertyAll(TextStyle(color: Colors.grey)),
-                  textStyle: const MaterialStatePropertyAll(TextStyle(fontSize: 20)),
-                  shape: const MaterialStatePropertyAll(ContinuousRectangleBorder()),
+                  hintStyle: const WidgetStatePropertyAll(TextStyle(color: Colors.grey)),
+                  textStyle: const WidgetStatePropertyAll(TextStyle(fontSize: 20)),
+                  shape: const WidgetStatePropertyAll(ContinuousRectangleBorder()),
                   onChanged: (newValue){
                     filterCustomerByName(newValue);
                   },

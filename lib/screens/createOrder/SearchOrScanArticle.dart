@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:proj1/screens/createOrder/searchArticleScreen.dart';
+import 'package:proj1/widgets/squareButtonWithIcon.dart';
 
 import 'scanArticleScreen.dart';
 
@@ -7,43 +9,44 @@ class SearchOrScanArticle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Selectioner ou scanner un article"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => const ScanArticleScreen()));
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text(
-                    'Scanner',
-                    style: TextStyle(fontSize: 20),
-                  ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          double buttonSize = constraints.maxWidth / 2;
+
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Squarebuttonwithicon(
+                      size: buttonSize,
+                      icon: Icons.search,
+                      label: 'Chercher',
+                      onPressed: () => {
+                        Navigator.push(context, MaterialPageRoute(builder: (ctx) => const SearchArticleScreen()))
+                      },
+                    ),
+                    Squarebuttonwithicon(
+                      size: buttonSize,
+                      icon: Icons.barcode_reader, // Changed from barcode_reader
+                      label: 'Scanner',
+                      onPressed: () => {
+                        Navigator.push(context, MaterialPageRoute(builder: (ctx) => const ScanArticleScreen()))
+                      },
+                    ),
+                  ],
                 ),
-              ),
+              ],
             ),
-            const SizedBox(width: 16), // Space between the two buttons
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () {},
-                child: const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text(
-                    'Chercher',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

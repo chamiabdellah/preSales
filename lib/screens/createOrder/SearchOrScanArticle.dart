@@ -30,7 +30,7 @@ class SearchOrScanArticle extends StatelessWidget {
                       icon: Icons.search,
                       label: 'Chercher',
                       onPressed: () => {
-                        Navigator.push(context, MaterialPageRoute(builder: (ctx) => const SearchArticleScreen()))
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => const SearchArticleScreen()))
                       },
                     ),
                     Squarebuttonwithicon(
@@ -38,7 +38,7 @@ class SearchOrScanArticle extends StatelessWidget {
                       icon: Icons.barcode_reader, // Changed from barcode_reader
                       label: 'Scanner',
                       onPressed: () => {
-                        Navigator.push(context, MaterialPageRoute(builder: (ctx) => const ScanArticleScreen()))
+                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => const ScanArticleScreen()))
                       },
                     ),
                   ],

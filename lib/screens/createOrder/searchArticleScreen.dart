@@ -93,7 +93,7 @@ class _SearchArticleScreenState extends ConsumerState<SearchArticleScreen> {
               itemBuilder: (context, index) {
                 return ArticleList(
                   article: allArticles[index],
-                  onClick: ()=> Navigator.push(
+                  onClick: ()=> Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                         builder: (ctx) => SetArticleQuantity(article: allArticles[index])),

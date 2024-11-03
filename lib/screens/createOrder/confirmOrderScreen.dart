@@ -4,6 +4,7 @@ import 'package:proj1/models/Article.dart';
 import 'package:proj1/providers/list_of_articles_provider.dart';
 import 'package:proj1/providers/list_of_customers_provider.dart';
 import 'package:proj1/providers/order_provider.dart';
+import 'package:proj1/screens/createOrder/SearchOrScanArticle.dart';
 import 'package:proj1/screens/createOrder/orderRecapScreen.dart';
 import 'package:proj1/screens/createOrder/scanArticleScreen.dart';
 import 'package:proj1/utils/Formaters.dart';
@@ -84,10 +85,7 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
         actions: [
           InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (ctx) => const ScanArticleScreen()));
-              /*.then((value) => {
-                        Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst)
-                      });*/
+              Navigator.push(context, MaterialPageRoute(builder: (ctx) => const SearchOrScanArticle()));
             },
             child: const Padding(
               padding: EdgeInsets.only(right: 20.0),

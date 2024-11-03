@@ -85,7 +85,7 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
         actions: [
           InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (ctx) => const SearchOrScanArticle()));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => const SearchOrScanArticle()));
             },
             child: const Padding(
               padding: EdgeInsets.only(right: 20.0),

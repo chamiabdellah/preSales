@@ -16,21 +16,48 @@ class OrderNotifier extends StateNotifier<Order?>{
     state = Order(customer: customer, listOrderLines: []);
   }
 
-  void addOrderLine({required Article article,required double quantity,required double discount}){
-    final OrderLine orderLine = OrderLine(
-        article: article,
-        index: '${state!.listOrderLines.length+1}',
-        quantity: quantity,
-        discount: discount);
+  void addOrderLine({required Article article, required double quantity, required double discount}) {
+    if (state == null) return;
 
-    state!.listOrderLines.add(orderLine);
-    Order? order = Order(customer: state!.customer, listOrderLines: state!.listOrderLines);
-    order.id = state!.id;
-    order.totalDiscount =  state!.totalDiscount;
-    order.totalCost = state!.totalCost;
+    // Create a new list to store the updated order lines
+    List<OrderLine> updatedOrderLines = List.of(state!.listOrderLines);
 
-    state = order;
+    // Check if the article already exists in order lines
+    final existingLineIndex = updatedOrderLines.indexWhere(
+            (line) => line.article.articleCode == article.articleCode
+    );
 
+    if (existingLineIndex != -1) {
+      // Update existing order line
+      OrderLine existingLine = updatedOrderLines[existingLineIndex];
+      updatedOrderLines[existingLineIndex] = OrderLine(
+          article: existingLine.article,
+          index: existingLine.index,
+          quantity: existingLine.quantity + quantity,
+          discount: existingLine.discount
+      );
+    } else {
+      // Add new order line
+      final OrderLine orderLine = OrderLine(
+          article: article,
+          index: '${updatedOrderLines.length + 1}',
+          quantity: quantity,
+          discount: discount
+      );
+      updatedOrderLines.add(orderLine);
+    }
+
+    // Create a new Order with the updated list
+    Order updatedOrder = Order(
+        customer: state!.customer,
+        listOrderLines: updatedOrderLines
+    );
+    updatedOrder.id = state!.id;
+    updatedOrder.totalDiscount = state!.totalDiscount;
+    updatedOrder.totalCost = state!.totalCost;
+
+    // Update the state with the new order
+    state = updatedOrder;
   }
 
   void deleteOrderLine(OrderLine orderLine){

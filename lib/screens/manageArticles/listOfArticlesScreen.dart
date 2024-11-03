@@ -45,6 +45,7 @@ class _ListOfArticlesState extends ConsumerState<ListOfArticles> {
           id: key,
         ));
       });
+      // TODO : search for 'convex.com' as a firebase replacement
       ref.read(listOfArticlesProvider.notifier).state = loadedItems;
       setState(() {
         isLoading = false;

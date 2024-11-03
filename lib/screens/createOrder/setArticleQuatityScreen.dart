@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/Article.dart';
 import 'package:proj1/providers/order_provider.dart';
+import 'package:proj1/screens/createOrder/SearchOrScanArticle.dart';
 import 'package:proj1/screens/createOrder/confirmOrderScreen.dart';
-import 'package:proj1/screens/createOrder/scanArticleScreen.dart';
 import 'package:proj1/widgets/articleList.dart';
 import 'package:proj1/widgets/largeButton.dart';
 import 'package:proj1/widgets/quantityForm.dart';
@@ -53,7 +53,7 @@ class _SetArticleQuantityState extends ConsumerState<SetArticleQuantity> {
   void addNewLine() {
     _createNewOrderLine();
     Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (ctx) => const ScanArticleScreen()));
+        MaterialPageRoute(builder: (ctx) => const SearchOrScanArticle()));
   }
 
   @override

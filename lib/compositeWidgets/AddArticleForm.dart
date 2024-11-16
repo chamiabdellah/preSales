@@ -18,11 +18,12 @@ import '../utils/Paths.dart';
 import '../widgets/PickImageCamera.dart';
 
 class AddArticleForm extends ConsumerStatefulWidget {
-  const AddArticleForm({Key? key, required this.scaffoldKey, this.baseArticle})
+  const AddArticleForm({Key? key, required this.scaffoldKey, this.baseArticle, this.shouldAddArticle = false})
       : super(key: key);
 
   final GlobalKey<ScaffoldState> scaffoldKey;
   final Article? baseArticle;
+  final bool? shouldAddArticle;
 
   @override
   ConsumerState<AddArticleForm> createState() => _AddArticleFormState();
@@ -55,7 +56,7 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
   @override
   void initState() {
     super.initState();
-    if (widget.baseArticle != null) {
+    if (widget.baseArticle != null || (widget.shouldAddArticle != null && widget.shouldAddArticle!)) {
       isAddMode = false;
       articleNameController!.text = widget.baseArticle!.name;
       articleQuantityController!.text = widget.baseArticle!.quantity.toString();

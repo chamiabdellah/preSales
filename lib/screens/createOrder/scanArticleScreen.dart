@@ -45,7 +45,7 @@ class _ScanArticleScreenState extends ConsumerState<ScanArticleScreen> {
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => SetArticleQuantity(article: article,)));
       }
     } else {
-      readBarCode();
+      await DialogMessagesLib.showNotFoundArticleMessage(context, 'Article non trouvé sur la base de donnée', barcodeScanRes, readBarCode);
     }
   }
 
@@ -60,7 +60,6 @@ class _ScanArticleScreenState extends ConsumerState<ScanArticleScreen> {
     super.initState();
     readBarCode();
   }
-
 
   @override
   Widget build(BuildContext context) {

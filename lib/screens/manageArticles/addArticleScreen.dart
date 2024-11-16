@@ -4,9 +4,10 @@ import 'package:proj1/models/Article.dart';
 import '../../compositeWidgets/AddArticleForm.dart';
 
 class AddArticleScreen extends StatelessWidget {
-  const AddArticleScreen({this.baseArticle,Key? key}) : super(key: key);
+  const AddArticleScreen({this.baseArticle,Key? key, this.shouldAddArticle}) : super(key: key);
 
   final Article? baseArticle;
+  final bool? shouldAddArticle;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class AddArticleScreen extends StatelessWidget {
       body: Column(
         children: [
           Flexible(
-            child: AddArticleForm(scaffoldKey : scaffoldKey, baseArticle : baseArticle),
+            child: AddArticleForm(scaffoldKey : scaffoldKey, baseArticle : baseArticle, shouldAddArticle: shouldAddArticle),
           ),
         ],
       ),

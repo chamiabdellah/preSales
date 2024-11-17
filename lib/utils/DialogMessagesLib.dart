@@ -10,6 +10,26 @@ class DialogMessagesLib {
     title: Text("Scannez l'article à ajouter"),
   );
 
+  static void showSimpleAlert(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Alerte'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   static Future<void> showNotFoundArticleMessage(
       BuildContext context,
       String message,

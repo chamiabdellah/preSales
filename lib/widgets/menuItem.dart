@@ -10,7 +10,7 @@ class MenuItem extends StatelessWidget {
       : super(key: key);
 
   final String title;
-  final Widget toScreen;
+  final Function toScreen;
   final Color color;
   final String? assetLogo;
 
@@ -35,10 +35,7 @@ class MenuItem extends StatelessWidget {
         width: double.infinity,
         height: itemHeight,
         child: InkWell(
-          onTap: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (ctx) => toScreen));
-          },
+          onTap: () => toScreen(),
           child: Stack(
             children: [
               Align(

@@ -6,7 +6,7 @@ import 'package:proj1/providers/list_of_customers_provider.dart';
 import 'package:proj1/providers/order_provider.dart';
 import 'package:proj1/screens/createOrder/SearchOrScanArticle.dart';
 import 'package:proj1/screens/createOrder/orderRecapScreen.dart';
-import 'package:proj1/screens/createOrder/scanArticleScreen.dart';
+import 'package:proj1/screens/menuScreen.dart';
 import 'package:proj1/utils/Formaters.dart';
 import 'package:proj1/utils/LoadingIndicator.dart';
 import 'package:proj1/widgets/emptyListInfo.dart';
@@ -64,12 +64,22 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
   }
 
   void createOrder() async {
-    LoadingIndicator.showLoadingIndicator(context, "Confirmation de la commande");
+    LoadingIndicator.showLoadingIndicator(context, "Sauvegarde de la commande");
     await ref.read(orderProvider.notifier).saveOrder();
     if(mounted){
       LoadingIndicator.hideLoadingIndicator(context);
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (ctx) => OrderRecapScreen(order: order)));
+    }
+  }
+
+  void removeOrder() {
+    LoadingIndicator.showLoadingIndicator(context, "Suppression de la commande");
+    ref.read(orderProvider.notifier).removeOrder();
+    if(mounted){
+      LoadingIndicator.hideLoadingIndicator(context);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (ctx) => const MenuScreen()));
     }
   }
 
@@ -84,14 +94,13 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
         title: const Text("Confirmez la commande"),
         actions: [
           InkWell(
-            onTap: () {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => const SearchOrScanArticle()));
-            },
+            onTap: removeOrder,
             child: const Padding(
               padding: EdgeInsets.only(right: 20.0),
               child : Icon(
                 size: 35,
-                Icons.add,  // add custom icons also
+                Icons.delete,
+                color: Colors.red,
               ),
             ),
           ),
@@ -160,10 +169,18 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
                 ),
               ),
               LargeButton(
+                label: "Ajouter une ligne",
+                color: const Color.fromRGBO(100, 255, 100, 0.6),
+                onClick: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => const SearchOrScanArticle()));
+                },
+              ),
+              const SizedBox(height: 5),
+              orderLines.isNotEmpty ? LargeButton(
                 label: "Confirmer",
                 color: const Color.fromRGBO(23, 2, 32, 2),
-                onClick: orderLines.isEmpty ? null : createOrder,
-              ),
+                onClick: createOrder,
+              ) : const SizedBox(),
             ],
           ),
         ],

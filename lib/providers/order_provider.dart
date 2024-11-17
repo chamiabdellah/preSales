@@ -104,6 +104,10 @@ class OrderNotifier extends StateNotifier<Order?>{
     }
   }
 
+  void removeOrder() {
+    state = null;
+  }
+
 }
 
 final orderProvider = StateNotifierProvider<OrderNotifier, Order?>((ref){

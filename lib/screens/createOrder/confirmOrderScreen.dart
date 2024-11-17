@@ -111,7 +111,20 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
           Column(
             children: [
               Container(
-                margin: const EdgeInsets.all(4),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: const Color.fromRGBO(248, 248, 248, 1.0),
+                ),
+                child: Text(
+                  textAlign: TextAlign.center,
+                  'Client : ${order?.customer.name ?? '---'}',
+                  style: const TextStyle(
+                      fontSize: 20, color: Color.fromRGBO(82, 82, 105, 1.0)),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top:0, bottom: 4),
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),

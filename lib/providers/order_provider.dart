@@ -62,6 +62,7 @@ class OrderNotifier extends StateNotifier<Order?>{
 
   void deleteOrderLine(OrderLine orderLine){
     state!.listOrderLines.remove(orderLine);
+    state = state?.copyWith();
   }
 
   void setQuantityOrderLine({required OrderLine orderLine,required double newQuatity}){

@@ -59,9 +59,7 @@ class _OrderDetailsScreenState extends ConsumerState<OrderDetailsScreen> {
 
     if(!mounted) return;
     LoadingIndicator.hideLoadingIndicator(context);
-    //Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
     Navigator.pop(context);
-
   }
 
   @override

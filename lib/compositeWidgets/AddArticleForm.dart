@@ -42,6 +42,7 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
 
   bool? isNewCode = true;
   bool isAddMode = true;
+  bool imageError = false;
 
   File? _articleImage;
 
@@ -89,8 +90,13 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
   }
 
   Future<void> addToDataBase() async {
-    if (_productFormKey.currentState == null ||
-        (_articleImage == null && isAddMode)) {
+    if(_articleImage == null && isAddMode){
+      setState(() {
+        imageError = true;
+      });
+      return;
+    }
+    if (_productFormKey.currentState == null) {
       return;
     }
     // 1- validate the fields.
@@ -315,6 +321,12 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
                 onPick: setArticleImage,
                 link: isAddMode ? null : widget.baseArticle?.picture,
               ),
+              imageError ? Text(
+                'Prenez une image de l\'article "${articleNameController!.value.text}"',
+                style: const TextStyle(
+                    color: Colors.red,
+                ),
+              ) : const SizedBox(),
               Flexible(
                 flex: 1,
                 child: Padding(

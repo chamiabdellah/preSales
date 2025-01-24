@@ -38,14 +38,16 @@ dependencies:
   http: ^0.13.5
   flutter_riverpod: ^2.3.6
   image_picker: ^0.8.7+5
-  firebase_storage: ^11.2.1
-  firebase_core: ^2.13.0
+  firebase_storage: ^12.4.1
+  firebase_core: ^3.10.1
+  firebase_auth: ^5.4.1
   flutter_barcode_scanner: ^2.0.0
   geolocator: ^9.0.2
   geocoding: ^2.1.0
   cached_network_image: ^3.3.0
   badges: ^3.1.1
   intl: ^0.17.0
+
 
 dev_dependencies:
   flutter_test:

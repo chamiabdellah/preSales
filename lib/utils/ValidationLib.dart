@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:proj1/models/unit.dart';
+import 'package:proj1/utils/SecurePath.dart';
 
 import 'Paths.dart';
 import 'package:http/http.dart' as http;
@@ -42,7 +43,8 @@ class ValidationLib{
 
   static Future<bool?> isNewArticleCode(String? articleCode) async {
 
-    final url = Uri.parse(Paths.getArticleByCodePath(articleCode!));
+    final securedPath = await SecurePath.appendToken(Paths.getArticleByCodePath(articleCode!, null));
+    final url = Uri.parse(securedPath);
     final response = await http.get(url);
 
     final extractedData = json.decode(response.body) as Map<String, dynamic>;

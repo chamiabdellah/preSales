@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:proj1/models/Article.dart';
+import 'package:proj1/utils/SecurePath.dart';
 import 'package:proj1/widgets/articleList.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj1/providers/list_of_articles_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../services/SecureStorageService.dart';
 import '../../utils/Paths.dart';
 import 'addArticleScreen.dart';
 
@@ -27,7 +29,7 @@ class _ListOfArticlesState extends ConsumerState<ListOfArticles> {
     setState(() {
       isLoading = true;
     });
-    String link = Paths.articlePath;
+    String link = await SecurePath.appendToken(Paths.articlePath);
     Uri uri = Uri.parse(link);
     final response = await http.get(uri);
 
@@ -91,7 +93,8 @@ class _ListOfArticlesState extends ConsumerState<ListOfArticles> {
   }
 
   void deleteArticleFromDatabase(Article article) async {
-    Uri uri = Uri.parse(Paths.getArticlePathWithId(article.id));
+    final securePath = await SecurePath.appendToken(Paths.getArticlePathWithId(article.id));
+    Uri uri = Uri.parse(securePath);
 
     final response = await http.delete(uri);
     if(response.statusCode == 200){

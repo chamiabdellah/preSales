@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj1/utils/Paths.dart';
+import 'package:proj1/utils/SecurePath.dart';
 
 import '../models/order.dart';
 
@@ -12,7 +13,7 @@ class ListOfConfirmOrdersNotifier extends StateNotifier<List<Order>>{
 
   Future<void> initOrdersListFromDb() async {
     //String link = PathsBuilder(Element.order).getElementPath();
-    String link = Paths.unconfirmedOrders;
+    String link = await SecurePath.appendToken(Paths.unconfirmedOrders);
     Uri uri = Uri.parse(link);
     final response = await http.get(uri);
 
@@ -32,7 +33,7 @@ class ListOfConfirmOrdersNotifier extends StateNotifier<List<Order>>{
     if(newOrder.id == null ) return;
     newOrder.confirmationDate = DateTime.now();
     newOrder.deliveryComment = "";
-    String link = PathsBuilder(Element.order).getElementPathWithId(newOrder.id!);
+    String link = await SecurePath.appendToken(PathsBuilder(Element.order).getElementPathWithId(newOrder.id!));
     Uri uri = Uri.parse(link);
     Map<String, dynamic> requestBody = newOrder.toJson();
     final response = await http.patch(uri, body: json.encode(requestBody));

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proj1/screens/menuScreen.dart';
+import 'package:proj1/services/SecureStorageService.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,12 +21,25 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  @override @override
+  void initState() {
+    super.initState();
+    SecureStorageService().deleteCredentials();
+  }
+
   Future<void> loginUser() async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
+      final tokenResult = await FirebaseAuth.instance.currentUser?.getIdTokenResult(false);
+      print(tokenResult?.claims);
+      var tokenId = await userCredential.user?.getIdToken(true);
+      final role = tokenResult!.claims?["role"];
+      print(userCredential.credential);
+      print(userCredential.user.toString());
+      SecureStorageService().saveCredentials(userCredential.user?.email ?? "", tokenId ?? "", role);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login Successful! Welcome ${userCredential.user?.email}')),
       );

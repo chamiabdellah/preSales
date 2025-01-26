@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:proj1/models/customer.dart';
 import 'package:http/http.dart' as http;
+import 'package:proj1/utils/SecurePath.dart';
 
+import '../services/SecureStorageService.dart';
 import '../utils/Paths.dart';
 
 class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
@@ -49,7 +51,7 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
   }
 
   Future<void> initListFromDb() async {
-    String link = Paths.customerPath;
+    String link = await SecurePath.appendToken(Paths.customerPath);
     Uri uri = Uri.parse(link);
     final response = await http.get(uri);
 
@@ -73,7 +75,7 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
   }
 
   Future<String> addCustomerToDB(Customer customer) async {
-    String link = Paths.customerPath;
+    String link = await SecurePath.appendToken(Paths.customerPath);
     Uri uri = Uri.parse(link);
     Map<String, dynamic> requestBody = {
       'name': customer.name,
@@ -93,7 +95,7 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
   }
 
   void deleteCustomerDB(String id) async {
-    String link = Paths.getCustomerPathWithId(id);
+    String link = await SecurePath.appendToken(Paths.getCustomerPathWithId(id));
     Uri uri = Uri.parse(link);
     final response = await http.delete(uri);
 

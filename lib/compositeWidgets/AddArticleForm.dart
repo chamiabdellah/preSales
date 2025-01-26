@@ -8,6 +8,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/Article.dart';
 import 'package:proj1/utils/LoadingIndicator.dart';
+import 'package:proj1/utils/SecurePath.dart';
 import 'package:proj1/utils/ValidationLib.dart';
 import 'package:proj1/widgets/OutlineTextField.dart';
 import 'package:http/http.dart' as http;
@@ -121,12 +122,14 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
 
       final Uri url;
       if (isAddMode) {
-        url = Uri.parse(Paths.articlePath);
+        final securedPath = await SecurePath.appendToken(Paths.articlePath);
+        url = Uri.parse(securedPath);
       } else {
         Article article = ref
             .read(listOfArticlesProvider.notifier)
             .getArticleByCode(articleCode);
-        url = Uri.parse(Paths.getArticlePathWithId(article.id));
+        final securePath = await SecurePath.appendToken(Paths.getArticlePathWithId(article.id));
+        url = Uri.parse(securePath);
       }
       // 2- read the values from the fields => will be done using the controllers
       Map<String, dynamic> requestBody = {

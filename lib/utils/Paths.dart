@@ -9,13 +9,13 @@ class Paths{
 
   // used to check the existence of an article with the same code
   static const String articleByCode = "https://amlogpresales-default-rtdb.europe-west1.firebasedatabase.app/Articles.json"
-      "?orderBy=\"articleCode\"&equalTo=\"%ARTICLE_CODE%\"";
+      "?orderBy=\"articleCode\"&equalTo=\"%ARTICLE_CODE%\"&auth=%AUTH_TOKEN%";
 
   // used to get the article from the database for modification => more accurate reading.
   static const String articleWithId = "https://amlogpresales-default-rtdb.europe-west1.firebasedatabase.app/Articles/%ARTICLE_ID%.json";
 
-  static String getArticleByCodePath(String code){
-    return articleByCode.replaceAll("%ARTICLE_CODE%", code);
+  static String getArticleByCodePath(String code, String? token){
+    return articleByCode.replaceAll("%ARTICLE_CODE%", code).replaceAll("%AUTH_TOKEN%", token ?? "");
   }
 
   static String getArticlePathWithId(String id){

@@ -8,6 +8,7 @@ import 'package:proj1/models/order_line.dart';
 import 'package:proj1/utils/Formaters.dart';
 import 'package:proj1/utils/Paths.dart';
 import 'package:http/http.dart' as http;
+import 'package:proj1/utils/SecurePath.dart';
 
 class OrderNotifier extends StateNotifier<Order?>{
   OrderNotifier() : super(null);
@@ -75,7 +76,8 @@ class OrderNotifier extends StateNotifier<Order?>{
   
   Future<String> incrementOrderCounter() async {
     // 1 get the value of the counter from the database
-    Uri uri = Uri.parse(PathsBuilder(Element.orderCounter).getElementPath());
+    final securedPath = await SecurePath.appendToken(PathsBuilder(Element.orderCounter).getElementPath());
+    Uri uri = Uri.parse(securedPath);
     final getResponse = await http.get(uri);
     final getData = json.decode(getResponse.body) as Map<String, dynamic>;
     int counter = getData['OrderCounter'];
@@ -91,7 +93,7 @@ class OrderNotifier extends StateNotifier<Order?>{
   }
 
   Future<void> saveOrder() async {
-    String link = PathsBuilder(Element.order).getElementPath();
+    String link = await SecurePath.appendToken(PathsBuilder(Element.order).getElementPath());
     Uri uri = Uri.parse(link);
     state!.creationDate = DateTime.now();
     state!.orderNumber = await incrementOrderCounter();

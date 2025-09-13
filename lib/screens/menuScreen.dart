@@ -1,24 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/screens/confirmOrders/listOfOrdersScreen.dart';
 import 'package:proj1/screens/deliverOrder/listOfDeliverOrdersScreen.dart';
 import 'package:proj1/screens/manageCustomers/listOfCustomersScreen.dart';
 import 'package:proj1/screens/manageSellers/listOfSellersScreen.dart';
+import 'package:proj1/providers/user_credentials_provider.dart';
+import 'package:proj1/widgets/imageNetworkCached.dart';
 
 import '../widgets/MutableMenuItem.dart';
 import '../widgets/cartAppBar.dart';
 import '../widgets/menuItem.dart';
 import 'manageArticles/listOfArticlesScreen.dart';
 
-class MenuScreen extends StatelessWidget {
+class MenuScreen extends ConsumerWidget {
   const MenuScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = ref.watch(userCredentialsProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Menu"),
-        actions: const [
-          CartAppBar(),
+        actions: [
+          if (currentUser != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: CircleAvatar(
+                radius: 18,
+                child: (currentUser.profilePic != null && currentUser.profilePic!.isNotEmpty)
+                    ? ClipOval(
+                        child: ImageNetworkCached(
+                          imageUrl: currentUser.profilePic!,
+                        ),
+                      )
+                    : const Icon(Icons.person),
+              ),
+            ),
+          const CartAppBar(),
         ],
       ),
       body: SingleChildScrollView(

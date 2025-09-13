@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/screens/menuScreen.dart';
 import 'package:proj1/services/SecureStorageService.dart';
+import 'package:proj1/providers/user_credentials_provider.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -40,6 +42,14 @@ class _LoginScreenState extends State<LoginScreen> {
       print(userCredential.credential);
       print(userCredential.user.toString());
       SecureStorageService().saveCredentials(userCredential.user?.email ?? "", tokenId ?? "", role);
+      
+      // Fetch user data by ID
+      try {
+        await ref.read(userCredentialsProvider.notifier).fetchUserById(userCredential.user!.uid);
+      } catch (e) {
+        print('Error fetching user data: $e');
+      }
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login Successful! Welcome ${userCredential.user?.email}')),
       );

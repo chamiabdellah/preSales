@@ -41,7 +41,7 @@ class _MutableMenuItemState extends ConsumerState<MutableMenuItem> {
     return MenuItem(
       title: "Créer une commande",
       toScreen: () => onClick(context),
-      color: numberOfLines == 0 ? Colors.greenAccent : Colors.orangeAccent,
+      color: Colors.greenAccent,
       assetLogo: 'assets/images/order_delivery.png',
     );
   }

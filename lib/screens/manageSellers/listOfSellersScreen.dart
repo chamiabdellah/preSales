@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/providers/list_of_sellers_provider.dart';
 import 'package:proj1/widgets/emptyListInfo.dart';
 import 'package:proj1/models/User.dart';
+import 'package:proj1/screens/manageSellers/addSellerScreen.dart';
 
 import '../../widgets/imageNetworkCached.dart';
 
@@ -47,6 +48,17 @@ class _ListOfSellersScreenState extends ConsumerState<ListOfSellersScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gérer Vendeurs'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (ctx) => const AddSellerScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())

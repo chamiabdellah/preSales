@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proj1/screens/confirmOrders/listOfOrdersScreen.dart';
 import 'package:proj1/screens/deliverOrder/listOfDeliverOrdersScreen.dart';
 import 'package:proj1/screens/manageCustomers/listOfCustomersScreen.dart';
+import 'package:proj1/screens/manageSellers/listOfSellersScreen.dart';
 
 import '../widgets/MutableMenuItem.dart';
 import '../widgets/cartAppBar.dart';
@@ -51,6 +52,13 @@ class MenuScreen extends StatelessWidget {
                   context, MaterialPageRoute(builder: (ctx) => const ListOfDeliverOrdersScreen())),
               color : Colors.blueGrey,
               assetLogo: 'assets/images/shipped.png',
+            ),
+            MenuItem(
+              title : "Gérer Vendeurs",
+              toScreen :  () => Navigator.push(
+                  context, MaterialPageRoute(builder: (ctx) => const ListOfSellersScreen())),
+              color : Colors.orange,
+              assetLogo: 'assets/images/people.png',
             ),
           ],
         ),

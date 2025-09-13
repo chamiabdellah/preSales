@@ -49,6 +49,11 @@ class Paths{
   static String undeliveredOrders = "https://amlogpresales-default-rtdb.europe-west1.firebasedatabase.app/Orders.json"
       "?orderBy=\"deliveryComment\"&equalTo=\"\"";
 
+  /*
+  Users
+   */
+  static const String usersPath = "https://amlogpresales-default-rtdb.europe-west1.firebasedatabase.app/Users.json";
+
 }
 
 class PathsBuilder{

@@ -28,6 +28,23 @@ class ListOfArticlesNotifier extends StateNotifier<List<Article>>{
     return state.firstWhere((element) => element.articleCode == code);
   }
 
+  void updateArticleQuantity(String articleCode, double newQuantity) {
+    state = state.map((article) {
+      if (article.articleCode == articleCode) {
+        return Article(
+          id: article.id,
+          name: article.name,
+          articleCode: article.articleCode,
+          unit: article.unit,
+          quantity: newQuantity,
+          price: article.price,
+          picture: article.picture,
+        );
+      }
+      return article;
+    }).toList();
+  }
+
   Future<List<Article>> fetchArticles() async {
     String link = await SecurePath.appendToken(Paths.articlePath);
     Uri uri = Uri.parse(link);

@@ -5,13 +5,15 @@ import 'package:proj1/models/Article.dart';
 import 'package:proj1/models/customer.dart';
 import 'package:proj1/models/order.dart';
 import 'package:proj1/models/order_line.dart';
+import 'package:proj1/providers/list_of_articles_provider.dart';
 import 'package:proj1/utils/Formaters.dart';
 import 'package:proj1/utils/Paths.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj1/utils/SecurePath.dart';
 
 class OrderNotifier extends StateNotifier<Order?>{
-  OrderNotifier() : super(null);
+  final Ref? ref;
+  OrderNotifier([this.ref]) : super(null);
 
   void createOrder(Customer customer){
     state = Order(customer: customer, listOrderLines: []);
@@ -93,6 +95,9 @@ class OrderNotifier extends StateNotifier<Order?>{
   }
 
   Future<void> saveOrder() async {
+    // Validate inventory before proceeding
+    _validateInventoryQuantities();
+    
     String link = await SecurePath.appendToken(PathsBuilder(Element.order).getElementPath());
     Uri uri = Uri.parse(link);
     state!.creationDate = DateTime.now();
@@ -100,9 +105,53 @@ class OrderNotifier extends StateNotifier<Order?>{
     Map<String, dynamic> requestBody = state!.toJson();
     final response = await http.post(uri, body: json.encode(requestBody));
     if(response.statusCode == 200){
+      // Update inventory quantities AFTER successful order creation
+      await _updateInventoryQuantities();
       state = null;
     } else{
       throw Exception("Impossible d'enregistrer la commande.");
+    }
+  }
+
+  void _validateInventoryQuantities() {
+    for (OrderLine orderLine in state!.listOrderLines) {
+      if (orderLine.article.quantity < orderLine.quantity) {
+        throw Exception("Stock insuffisant pour l'article ${orderLine.article.name}");
+      }
+    }
+  }
+
+  Future<void> _updateInventoryQuantities() async {
+    for (OrderLine orderLine in state!.listOrderLines) {
+      Article article = orderLine.article;
+      double newQuantity = article.quantity - orderLine.quantity;
+      
+      try {
+        // Update article quantity in database
+        final securePath = await SecurePath.appendToken(Paths.getArticlePathWithId(article.id));
+        Uri uri = Uri.parse(securePath);
+        
+        Map<String, dynamic> requestBody = {
+          'articleCode': article.articleCode,
+          'articleName': article.name,
+          'image': article.picture,
+          'price': article.price,
+          'quantity': newQuantity,
+          'unit': article.unit,
+        };
+        
+        final response = await http.patch(uri, body: json.encode(requestBody));
+        if (response.statusCode != 200) {
+          throw Exception("Erreur lors de la mise à jour de l'inventaire pour ${article.name}");
+        }
+        
+        // Update local state only after successful database update
+        if (ref != null) {
+          ref!.read(listOfArticlesProvider.notifier).updateArticleQuantity(article.articleCode, newQuantity);
+        }
+      } catch (e) {
+        throw Exception("Erreur lors de la mise à jour de l'inventaire: $e");
+      }
     }
   }
 
@@ -113,5 +162,5 @@ class OrderNotifier extends StateNotifier<Order?>{
 }
 
 final orderProvider = StateNotifierProvider<OrderNotifier, Order?>((ref){
-  return OrderNotifier();
+  return OrderNotifier(ref);
 });

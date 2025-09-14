@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
+import '../QRViewExample.dart';
 import 'package:proj1/widgets/imageNetworkCached.dart';
 
 import '../../models/order_line.dart';
@@ -38,26 +39,11 @@ class _OrderLineDetailsState extends State<OrderLineDetails> {
     String barcodeScanRes;
 
     try {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => Scaffold(
-            appBar: AppBar(title: const Text('Scanner le code-barres')),
-            body: MobileScanner(
-              onDetect: (capture) {
-                final List<Barcode> barcodes = capture.barcodes;
-                if (barcodes.isNotEmpty) {
-                  setState(() {
-                    barcodeScanRes = barcodes.first.rawValue ?? '';
-                  });
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ),
-        ),
+      final result = await Navigator.of(context).push<String>(
+        MaterialPageRoute(builder: (context) => QRViewExample()),
       );
-      return;
-    } on PlatformException {
+      barcodeScanRes = result ?? '-1';
+    } catch (e) {
       barcodeScanRes = 'Failed to get platform version.';
     }
     if (!mounted) return;

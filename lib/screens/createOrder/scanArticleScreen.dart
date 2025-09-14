@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
+import '../../widgets/QRViewExample.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/Article.dart';
 import 'package:proj1/providers/list_of_articles_provider.dart';
@@ -21,26 +22,11 @@ class _ScanArticleScreenState extends ConsumerState<ScanArticleScreen> {
     String barcodeScanRes;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => Scaffold(
-            appBar: AppBar(title: const Text('Scanner le code-barres')),
-            body: MobileScanner(
-              onDetect: (capture) {
-                final List<Barcode> barcodes = capture.barcodes;
-                if (barcodes.isNotEmpty) {
-                  setState(() {
-                    barcodeScanRes = barcodes.first.rawValue ?? '';
-                  });
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ),
-        ),
+      final result = await Navigator.of(context).push<String>(
+        MaterialPageRoute(builder: (context) => QRViewExample()),
       );
-      return;
-    } on PlatformException {
+      barcodeScanRes = result ?? '-1';
+    } catch (e) {
       barcodeScanRes = 'Failed to get platform version.';
     }
     if (!mounted) return;

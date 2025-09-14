@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/Article.dart';
 import 'package:proj1/utils/LoadingIndicator.dart';
@@ -17,6 +17,7 @@ import '../models/unit.dart';
 import '../providers/list_of_articles_provider.dart';
 import '../utils/Paths.dart';
 import '../widgets/PickImageCamera.dart';
+import '../widgets/QRViewExample.dart';
 
 class AddArticleForm extends ConsumerStatefulWidget {
   const AddArticleForm({Key? key, required this.scaffoldKey, this.baseArticle, this.shouldAddArticle = false})
@@ -207,24 +208,14 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
   }
 
   void readBarCode() async {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(title: const Text('Scanner le code-barres')),
-          body: MobileScanner(
-            onDetect: (capture) {
-              final List<Barcode> barcodes = capture.barcodes;
-              if (barcodes.isNotEmpty) {
-                setState(() {
-                  articleCodeController!.text = barcodes.first.rawValue ?? '';
-                });
-                Navigator.of(context).pop();
-              }
-            },
-          ),
-        ),
-      ),
+    final result = await Navigator.of(context).push<String>(
+      MaterialPageRoute(builder: (context) => QRViewExample()),
     );
+    if (result != null && result != '-1') {
+      setState(() {
+        articleCodeController!.text = result;
+      });
+    }
   }
 
   Future<String> uploadImage() async {

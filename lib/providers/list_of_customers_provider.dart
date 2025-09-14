@@ -6,7 +6,6 @@ import 'package:proj1/models/customer.dart';
 import 'package:http/http.dart' as http;
 import 'package:proj1/utils/SecurePath.dart';
 
-import '../services/SecureStorageService.dart';
 import '../utils/Paths.dart';
 
 class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {

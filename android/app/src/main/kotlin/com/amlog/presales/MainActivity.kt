@@ -1,4 +1,4 @@
-package com.example.proj1
+package com.amlog.presales
 
 import io.flutter.embedding.android.FlutterActivity
 

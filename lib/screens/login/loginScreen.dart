@@ -55,7 +55,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       );
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (ctx) => const MenuScreen()));
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login Failed')),
       );

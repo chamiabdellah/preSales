@@ -24,9 +24,7 @@ class _CartAppBarState extends ConsumerState<CartAppBar> {
   Widget build(BuildContext context) {
     Order? order = ref.watch(orderProvider);
     int? numberOfLines;
-    setState(() {
-      numberOfLines = order?.listOrderLines.length;
-    });
+    numberOfLines = order?.listOrderLines.length ?? 0;
 
     return
       numberOfLines == null ?

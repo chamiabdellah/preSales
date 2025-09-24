@@ -30,13 +30,28 @@ class OrderNotifier extends StateNotifier<Order?>{
             (line) => line.article.articleCode == article.articleCode
     );
 
+    double finalQuantity;
+    if (existingLineIndex != -1) {
+      // Calculate final quantity for existing line
+      OrderLine existingLine = updatedOrderLines[existingLineIndex];
+      finalQuantity = existingLine.quantity + quantity;
+    } else {
+      // New line quantity
+      finalQuantity = quantity;
+    }
+
+    // Validate inventory before adding/updating
+    if (article.quantity < finalQuantity) {
+      throw Exception("Stock insuffisant pour l'article:\n\n${article.name}\n\nStock disponible: ${article.quantity.toInt()}\nQuantité demandée: ${finalQuantity.toInt()}");
+    }
+
     if (existingLineIndex != -1) {
       // Update existing order line
       OrderLine existingLine = updatedOrderLines[existingLineIndex];
       updatedOrderLines[existingLineIndex] = OrderLine(
           article: existingLine.article,
           index: existingLine.index,
-          quantity: existingLine.quantity + quantity,
+          quantity: finalQuantity,
           discount: existingLine.discount
       );
     } else {
@@ -69,6 +84,9 @@ class OrderNotifier extends StateNotifier<Order?>{
   }
 
   void setQuantityOrderLine({required OrderLine orderLine,required double newQuatity}){
+    if (orderLine.article.quantity < newQuatity) {
+      throw Exception("Stock insuffisant pour l'article:\n\n${orderLine.article.name}\n\nStock disponible: ${orderLine.article.quantity.toInt()}\nQuantité demandée: ${newQuatity.toInt()}");
+    }
     state!.listOrderLines.firstWhere((element) => element.index == orderLine.index).quantity = newQuatity;
   }
 

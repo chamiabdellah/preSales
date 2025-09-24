@@ -7,6 +7,7 @@ import 'package:proj1/screens/createOrder/confirmOrderScreen.dart';
 import 'package:proj1/widgets/articleList.dart';
 import 'package:proj1/widgets/largeButton.dart';
 import 'package:proj1/widgets/quantityForm.dart';
+import 'package:proj1/utils/DialogMessagesLib.dart';
 
 import '../../widgets/cartAppBar.dart';
 import '../manageArticles/addArticleScreen.dart';
@@ -39,21 +40,34 @@ class _SetArticleQuantityState extends ConsumerState<SetArticleQuantity> {
     });
   }
 
-  void _createNewOrderLine() {
-    ref.read(orderProvider.notifier).addOrderLine(
-        article: widget.article, quantity: chosenQuantity, discount: 0);
-  }
-
   void validateQuantity() {
-    _createNewOrderLine();
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (ctx) => const ConfirmOrderScreen()));
+    try {
+      _createNewOrderLine();
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (ctx) => const ConfirmOrderScreen()));
+    } catch (e) {
+      // Error already handled in _createNewOrderLine
+    }
   }
 
   void addNewLine() {
-    _createNewOrderLine();
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (ctx) => const SearchOrScanArticle()));
+    try {
+      _createNewOrderLine();
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (ctx) => const SearchOrScanArticle()));
+    } catch (e) {
+      // Error already handled in _createNewOrderLine
+    }
+  }
+
+  void _createNewOrderLine() {
+    try {
+      ref.read(orderProvider.notifier).addOrderLine(
+          article: widget.article, quantity: chosenQuantity, discount: 0);
+    } catch (e) {
+      DialogMessagesLib.showInsufficientStockDialog(context, e.toString());
+      rethrow;
+    }
   }
 
   @override

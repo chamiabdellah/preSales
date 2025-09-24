@@ -576,6 +576,13 @@
             </list>
           </value>
         </entry>
+        <entry key="mobile_scanner">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/mobile_scanner-3.5.7/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="octo_image">
           <value>
             <list>
@@ -657,13 +664,6 @@
           <value>
             <list>
               <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/pointycastle-3.7.3/lib" />
-            </list>
-          </value>
-        </entry>
-        <entry key="qr_code_scanner_plus">
-          <value>
-            <list>
-              <option value="$USER_HOME$/.pub-cache/hosted/pub.dev/qr_code_scanner_plus-2.0.10+1/lib" />
             </list>
           </value>
         </entry>
@@ -931,6 +931,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/material_color_utilities-0.11.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/meta-1.16.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/mime-2.0.0/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/mobile_scanner-3.5.7/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/octo_image-2.1.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/path-1.9.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/path_provider-2.1.5/lib" />
@@ -943,7 +944,6 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/platform-3.1.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.8/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/pointycastle-3.7.3/lib" />
-      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/qr_code_scanner_plus-2.0.10+1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/riverpod-2.6.1/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/rxdart-0.27.7/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/source_span-1.10.0/lib" />

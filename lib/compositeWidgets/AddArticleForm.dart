@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/Article.dart';
 import 'package:proj1/utils/LoadingIndicator.dart';
@@ -17,7 +16,7 @@ import '../models/unit.dart';
 import '../providers/list_of_articles_provider.dart';
 import '../utils/Paths.dart';
 import '../widgets/PickImageCamera.dart';
-import '../widgets/QRViewExample.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class AddArticleForm extends ConsumerStatefulWidget {
   const AddArticleForm({Key? key, required this.scaffoldKey, this.baseArticle, this.shouldAddArticle = false})
@@ -208,26 +207,60 @@ class _AddArticleFormState extends ConsumerState<AddArticleForm> {
   }
 
   void readBarCode() async {
-    final result = await Navigator.of(context).push<String>(
-      MaterialPageRoute(builder: (context) => QRViewExample()),
-    );
-    if (result != null && result != '-1') {
-      setState(() {
-        articleCodeController!.text = result;
-      });
+    String barcodeScanRes = '';
+    try {
+      bool hasPopped = false;
+      final result = await Navigator.of(context).push<String>(
+        MaterialPageRoute(
+          builder: (context) => Scaffold(
+            appBar: AppBar(
+              title: const Text('Scanner le code-barres'),
+              backgroundColor: Colors.blue,
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop('-1'),
+                  child: const Text('Annuler', style: TextStyle(color: Colors.white)),
+                ),
+              ],
+            ),
+            body: MobileScanner(
+              onDetect: (capture) {
+                final List<Barcode> barcodes = capture.barcodes;
+                if (barcodes.isNotEmpty && !hasPopped) {
+                  hasPopped = true;
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (Navigator.canPop(context)) {
+                      Navigator.of(context).pop(barcodes.first.rawValue ?? '');
+                    }
+                  });
+                }
+              },
+            ),
+          ),
+        ),
+      );
+      barcodeScanRes = result ?? '-1';
+    } catch (e) {
+      barcodeScanRes = 'Failed to get platform version.';
     }
+
+    if (!mounted) return;
+
+    setState(() {
+      articleCodeController!.text = barcodeScanRes;
+    });
   }
 
   Future<String> uploadImage() async {
     //File compressedImage = FlutterNativeImage.compressImage()
-    Reference storageRef = FirebaseStorage.instance
+    final storageRef = FirebaseStorage.instance
         .ref()
         .child('article_images')
         .child(
             '${articleCodeController!.value.text}${articleNameController!.value.text}.jpeg');
     await storageRef.putFile(_articleImage!);
 
-    return storageRef.getDownloadURL();
+    return await storageRef.getDownloadURL();
   }
 
   @override

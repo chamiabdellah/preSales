@@ -23,10 +23,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     super.dispose();
   }
 
-  @override @override
+  @override
   void initState() {
     super.initState();
-    SecureStorageService().deleteCredentials();
+    _loadSavedCredentials();
+  }
+
+  Future<void> _loadSavedCredentials() async {
+    final credentials = await SecureStorageService().getCredentials();
+    if (credentials['email'] != null) {
+      emailController.text = credentials['email']!;
+    }
+    final password = await SecureStorageService().getPassword();
+    if (password != null) {
+      passwordController.text = password;
+    }
   }
 
   Future<void> loginUser() async {
@@ -42,6 +53,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       print(userCredential.credential);
       print(userCredential.user.toString());
       SecureStorageService().saveCredentials(userCredential.user?.email ?? "", tokenId ?? "", role);
+      await SecureStorageService().savePassword(passwordController.text.trim());
       
       // Fetch user data by ID
       try {

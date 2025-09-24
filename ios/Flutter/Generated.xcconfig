@@ -2,14 +2,14 @@
 FLUTTER_ROOT=/Users/abdellahchami/Documents/spring boot API/myStore/preSalesApp/flutter
 FLUTTER_APPLICATION_PATH=/Users/abdellahchami/Documents/Imedia24/preSales
 COCOAPODS_PARALLEL_CODE_SIGN=true
-FLUTTER_TARGET=/Users/abdellahchami/Documents/Imedia24/preSales/lib/main.dart
+FLUTTER_TARGET=lib/main.dart
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0
 FLUTTER_BUILD_NUMBER=1
-EXCLUDED_ARCHS[sdk=iphonesimulator*]=i386
+EXCLUDED_ARCHS[sdk=iphonesimulator*]=i386 arm64
 EXCLUDED_ARCHS[sdk=iphoneos*]=armv7
 DART_DEFINES=RkxVVFRFUl9WRVJTSU9OPTMuMzUuMw==,RkxVVFRFUl9DSEFOTkVMPXN0YWJsZQ==,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049YTQwMmQ5YTQzNw==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049ZGRmNDdkZDNmZg==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My45LjI=
 DART_OBFUSCATION=false
-TRACK_WIDGET_CREATION=true
-TREE_SHAKE_ICONS=false
+TRACK_WIDGET_CREATION=false
+TREE_SHAKE_ICONS=true
 PACKAGE_CONFIG=/Users/abdellahchami/Documents/Imedia24/preSales/.dart_tool/package_config.json

@@ -67,12 +67,12 @@ class ListOfSellersNotifier extends StateNotifier<List<User>> {
   }
 
   Future<String> _uploadProfileImage(File image, String email) async {
-    Reference storageRef = FirebaseStorage.instance
+    final storageRef = FirebaseStorage.instance
         .ref()
         .child('profile_images')
         .child('$email.jpeg');
     await storageRef.putFile(image);
-    return storageRef.getDownloadURL();
+    return await storageRef.getDownloadURL();
   }
 }
 

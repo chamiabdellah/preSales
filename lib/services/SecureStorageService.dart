@@ -14,6 +14,16 @@ class SecureStorageService {
     }
   }
 
+  // Save password securely
+  Future<void> savePassword(String password) async {
+    await _storage.write(key: 'password', value: password);
+  }
+
+  // Get saved password
+  Future<String?> getPassword() async {
+    return await _storage.read(key: 'password');
+  }
+
   // Retrieve credentials securely
   Future<Map<String, String?>> getCredentials() async {
     String? email = await _storage.read(key: 'email');

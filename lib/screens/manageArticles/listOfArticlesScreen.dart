@@ -97,7 +97,7 @@ class _ListOfArticlesState extends ConsumerState<ListOfArticles> {
 
     final response = await http.delete(uri);
     if(response.statusCode == 200){
-      Reference storageRef = FirebaseStorage.instance
+      final storageRef = FirebaseStorage.instance
           .ref()
           .child('article_images')
           .child('${article.articleCode}${article.name}.jpeg');

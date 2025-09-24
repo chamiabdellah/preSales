@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
-import '../QRViewExample.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:proj1/widgets/imageNetworkCached.dart';
 
 import '../../models/order_line.dart';
@@ -40,7 +39,32 @@ class _OrderLineDetailsState extends State<OrderLineDetails> {
 
     try {
       final result = await Navigator.of(context).push<String>(
-        MaterialPageRoute(builder: (context) => QRViewExample()),
+        MaterialPageRoute(
+          builder: (context) => Scaffold(
+            appBar: AppBar(
+              title: const Text('Scanner le code-barres'),
+              backgroundColor: Colors.blue,
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop('-1'),
+                  child: const Text('Annuler', style: TextStyle(color: Colors.white)),
+                ),
+              ],
+            ),
+            body: MobileScanner(
+              onDetect: (capture) {
+                final List<Barcode> barcodes = capture.barcodes;
+                if (barcodes.isNotEmpty) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (Navigator.canPop(context)) {
+                      Navigator.of(context).pop(barcodes.first.rawValue ?? '');
+                    }
+                  });
+                }
+              },
+            ),
+          ),
+        ),
       );
       barcodeScanRes = result ?? '-1';
     } catch (e) {

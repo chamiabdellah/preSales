@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
-import '../../widgets/QRViewExample.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/Article.dart';
 import 'package:proj1/providers/list_of_articles_provider.dart';
 import 'package:proj1/screens/createOrder/setArticleQuatityScreen.dart';
-import 'package:proj1/utils/DialogMessagesLib.dart';
 
 class ScanArticleScreen extends ConsumerStatefulWidget {
   const ScanArticleScreen({Key? key}) : super(key: key);
@@ -16,52 +14,36 @@ class ScanArticleScreen extends ConsumerStatefulWidget {
 }
 
 class _ScanArticleScreenState extends ConsumerState<ScanArticleScreen> {
-  Article? chosenArticle;
+  Article? scannedArticle;
+  String scanArticleMessage = "Scanner Un Article";
 
-  void readBarCode() async {
-    String barcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      final result = await Navigator.of(context).push<String>(
-        MaterialPageRoute(builder: (context) => QRViewExample()),
-      );
-      barcodeScanRes = result ?? '-1';
-    } catch (e) {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-    if (!mounted) return;
+  void _handleBarcode(BarcodeCapture barcodes) async {
+    String? barecodeValue = barcodes.barcodes.firstOrNull?.displayValue;
+    if (mounted && barecodeValue != null && barecodeValue.isNotEmpty ) {
 
-    if(barcodeScanRes == "-1"){
-      // the user clicked on cancel => pop the screen.
-      Navigator.pop(context);
-      return;
-    }
-    // get the article by code :
-    final article = await ref
-        .read(listOfArticlesProvider.notifier)
-        .getArticleByCodeDB(barcodeScanRes);
-    if (article != null) {
-      setState(() {
-        chosenArticle = article;
-      });
-      if(mounted) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx) => SetArticleQuantity(article: article,)));
+      final article = await ref
+          .read(listOfArticlesProvider.notifier)
+          .getArticleByCodeDB(barecodeValue);
+
+      if (article != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SetArticleQuantity(article: article),
+          ),
+        );
+      } else {
+        setState(() {
+          scanArticleMessage = "Article non trouvé sur la base de donnée";
+        });
+        // await DialogMessagesLib.showNotFoundArticleMessage(context, 'Article non trouvé sur la base de donnée', barecodeValue, () => {});
       }
-    } else {
-      await DialogMessagesLib.showNotFoundArticleMessage(context, 'Article non trouvé sur la base de donnée', barcodeScanRes, readBarCode);
     }
-  }
-
-  void showInfoToUser(){
-    showDialog(context: context, builder: (ctx){
-      return DialogMessagesLib.requestToScanAnArticle;
-    });
   }
 
   @override
   void initState() {
     super.initState();
-    readBarCode();
   }
 
   @override
@@ -70,12 +52,30 @@ class _ScanArticleScreenState extends ConsumerState<ScanArticleScreen> {
       appBar: AppBar(
         title: const Text("Scannez l\'article"),
       ),
-      body: const Center(
-        child: Icon(
-          Icons.barcode_reader,
-          size: 32,
-        ),
-      ),
+      body: Stack(
+        children: [
+          MobileScanner(onDetect: _handleBarcode, ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              alignment: Alignment.bottomCenter,
+              height: 200,
+              color: const Color.fromRGBO(0, 0, 0, 0.4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(child: Center(child: Text(
+                    scanArticleMessage,
+                    overflow: TextOverflow.fade,
+                    style: const TextStyle(color: Colors.white),)
+                  )
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      )
     );
   }
 }

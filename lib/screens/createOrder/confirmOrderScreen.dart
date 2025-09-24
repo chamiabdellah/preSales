@@ -65,11 +65,46 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
 
   void createOrder() async {
     LoadingIndicator.showLoadingIndicator(context, "Sauvegarde de la commande");
-    await ref.read(orderProvider.notifier).saveOrder();
-    if(mounted){
-      LoadingIndicator.hideLoadingIndicator(context);
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (ctx) => OrderRecapScreen(order: order)));
+    try {
+      await ref.read(orderProvider.notifier).saveOrder();
+      if(mounted){
+        LoadingIndicator.hideLoadingIndicator(context);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (ctx) => OrderRecapScreen(order: order)));
+      }
+    } catch (e) {
+      if(mounted){
+        LoadingIndicator.hideLoadingIndicator(context);
+        showDialog(
+          context: context,
+          builder: (context) {
+            final message = e.toString().replaceFirst('Exception: ', '');
+            final parts = message.split('\n\n');
+            return AlertDialog(
+              title: const Text('Stock insuffisant'),
+              content: RichText(
+                text: TextSpan(
+                  style: const TextStyle(color: Colors.black, fontSize: 16),
+                  children: [
+                    const TextSpan(text: 'Stock insuffisant pour l\'article:\n\n'),
+                    TextSpan(
+                      text: '${parts.length > 1 ? parts[1] : ''}\n\n',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    TextSpan(text: parts.length > 2 ? parts[2] : ''),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
   }
 

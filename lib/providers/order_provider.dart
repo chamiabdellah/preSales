@@ -116,7 +116,7 @@ class OrderNotifier extends StateNotifier<Order?>{
   void _validateInventoryQuantities() {
     for (OrderLine orderLine in state!.listOrderLines) {
       if (orderLine.article.quantity < orderLine.quantity) {
-        throw Exception("Stock insuffisant pour l'article ${orderLine.article.name}");
+        throw Exception("Stock insuffisant pour l'article:\n\n${orderLine.article.name}\n\nStock disponible: ${orderLine.article.quantity.toInt()}\nQuantité demandée: ${orderLine.quantity.toInt()}");
       }
     }
   }

@@ -41,32 +41,27 @@ class _SetArticleQuantityState extends ConsumerState<SetArticleQuantity> {
   }
 
   void validateQuantity() {
-    try {
-      _createNewOrderLine();
+    if (_createNewOrderLine()) {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (ctx) => const ConfirmOrderScreen()));
-    } catch (e) {
-      // Error already handled in _createNewOrderLine
     }
   }
 
   void addNewLine() {
-    try {
-      _createNewOrderLine();
+    if (_createNewOrderLine()) {
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (ctx) => const SearchOrScanArticle()));
-    } catch (e) {
-      // Error already handled in _createNewOrderLine
     }
   }
 
-  void _createNewOrderLine() {
+  bool _createNewOrderLine() {
     try {
       ref.read(orderProvider.notifier).addOrderLine(
           article: widget.article, quantity: chosenQuantity, discount: 0);
+      return true;
     } catch (e) {
       DialogMessagesLib.showInsufficientStockDialog(context, e.toString());
-      rethrow;
+      return false;
     }
   }
 

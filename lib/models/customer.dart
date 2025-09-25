@@ -10,6 +10,7 @@ class Customer{
   String? picture;
   String? phoneNumber;
   DateTime? creationDate;
+  String? managerName;
 
   Customer({
     required this.name,
@@ -21,6 +22,7 @@ class Customer{
     this.picture,
     this.phoneNumber,
     this.creationDate,
+    this.managerName,
   });
 
   Customer.fromJson(MapEntry<String, dynamic> json):
@@ -32,7 +34,8 @@ class Customer{
     code = json.value['code'],
     picture = json.value['picture'],
     phoneNumber = json.value['phoneNumber'],
-    creationDate = DateTime.tryParse(json.value['creationDate'] ?? "");
+    creationDate = DateTime.tryParse(json.value['creationDate'] ?? ""),
+    managerName = json.value['managerName'];
 
   Map<String,dynamic> toJson() => {
     'name': name,
@@ -43,5 +46,6 @@ class Customer{
     'picture': picture,
     'phoneNumber': phoneNumber,
     'creationDate': creationDate?.toString(),
+    'managerName': managerName,
   };
 }

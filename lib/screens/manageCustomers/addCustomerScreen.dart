@@ -26,11 +26,13 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
   final _customerFormKey = GlobalKey<FormState>();
   TextEditingController? customerNameController = TextEditingController();
   TextEditingController? phoneNumberController = TextEditingController();
+  TextEditingController? managerNameController = TextEditingController();
 
   double? latitude;
   double? longitude;
   String? address;
   File? _customerImage;
+  bool _useClientNameAsManager = true;
 
   void getAddressFromLocation(Position position) async {
 
@@ -66,6 +68,21 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
   void setCustomerImage(File imageFile) {
     setState(() {
       _customerImage = imageFile;
+    });
+  }
+
+  void _onClientNameChanged() {
+    if (_useClientNameAsManager) {
+      managerNameController!.text = customerNameController!.text;
+    }
+  }
+
+  void _onToggleChanged(bool value) {
+    setState(() {
+      _useClientNameAsManager = value;
+      if (value) {
+        managerNameController!.text = customerNameController!.text;
+      }
     });
   }
 
@@ -107,6 +124,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
         picture: imagePath,
         phoneNumber: phoneNumberController!.value.text.isEmpty ? null : phoneNumberController!.value.text,
         creationDate: DateTime.now(),
+        managerName: managerNameController!.value.text,
       );
       
        await ref.read(listOfCustomersProvider.notifier).addCustomer(customer);
@@ -155,10 +173,38 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: OutlineTextField(
-                    labelText: "Nom du client",
+                  child: TextFormField(
                     controller: customerNameController,
+                    decoration: const InputDecoration(
+                      labelText: "Nom du client",
+                      border: UnderlineInputBorder(),
+                    ),
+                    validator: ValidationLib.nonEmptyField,
+                    onChanged: (value) => _onClientNameChanged(),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Row(
+                    children: [
+                      Switch(
+                        value: _useClientNameAsManager,
+                        onChanged: _onToggleChanged,
+                      ),
+                      const SizedBox(width: 8),
+                      const Text('Utiliser le nom du client comme gérant'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: OutlineTextField(
+                    labelText: "Nom du gérant",
+                    controller: managerNameController,
                     validationFunc: ValidationLib.nonEmptyField,
+                    isEnabled: !_useClientNameAsManager,
                   ),
                 ),
                 const SizedBox(

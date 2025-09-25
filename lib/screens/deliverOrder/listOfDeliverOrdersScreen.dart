@@ -24,7 +24,7 @@ class _ListOfDeliverOrdersScreenState extends ConsumerState<ListOfDeliverOrdersS
     });
     try{
       await ref.read(listOfDeliverOrdersProvider.notifier).initOrdersListFromDb();
-      await initializeDateFormatting('fr_FR');
+
     } catch(e){
       setState(() {
         isLoading = false;

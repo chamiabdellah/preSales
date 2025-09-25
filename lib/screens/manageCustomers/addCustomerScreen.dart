@@ -108,6 +108,16 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
 
   void addCustomer() async {
     if(_customerFormKey.currentState!.validate()){
+      if (address == null || latitude == null || longitude == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Veuillez sélectionner une localisation en appuyant sur l\'icône de localisation'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+      
       LoadingIndicator.showLoadingIndicator(context, "Ajout du client");
       
       String? imagePath;

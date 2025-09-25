@@ -23,11 +23,10 @@ class _CartAppBarState extends ConsumerState<CartAppBar> {
   @override
   Widget build(BuildContext context) {
     Order? order = ref.watch(orderProvider);
-    int? numberOfLines;
-    numberOfLines = order?.listOrderLines.length ?? 0;
+    int? numberOfLines = order?.listOrderLines.length ?? 0;
 
     return
-      numberOfLines == null ?
+      order?.customer == null ?
       const SizedBox(width: 0,):
       InkWell(
       onTap: viewCartContent,
@@ -36,7 +35,7 @@ class _CartAppBarState extends ConsumerState<CartAppBar> {
         width: 60,
         child: badges.Badge(
           position: badges.BadgePosition.topEnd(end: -5,top: -17),
-          badgeContent: Text(numberOfLines?.toString() ?? "0", style: const TextStyle(fontSize: 20, color: Colors.white),),
+          badgeContent: Text(numberOfLines.toString(), style: const TextStyle(fontSize: 20, color: Colors.white),),
           child: const Icon(
             Icons.shopping_cart_rounded,
             size: 35,

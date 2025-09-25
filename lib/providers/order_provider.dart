@@ -5,7 +5,9 @@ import 'package:proj1/models/Article.dart';
 import 'package:proj1/models/customer.dart';
 import 'package:proj1/models/order.dart';
 import 'package:proj1/models/order_line.dart';
+import 'package:proj1/models/seller.dart';
 import 'package:proj1/providers/list_of_articles_provider.dart';
+import 'package:proj1/providers/user_credentials_provider.dart';
 import 'package:proj1/utils/Formaters.dart';
 import 'package:proj1/utils/Paths.dart';
 import 'package:http/http.dart' as http;
@@ -115,6 +117,14 @@ class OrderNotifier extends StateNotifier<Order?>{
   Future<void> saveOrder() async {
     // Validate inventory before proceeding
     _validateInventoryQuantities();
+    
+    // Add seller information from current user
+    if (ref != null) {
+      final currentUser = ref!.read(userCredentialsProvider);
+      if (currentUser != null) {
+        state!.seller = Seller(id: currentUser.userId, name: currentUser.name);
+      }
+    }
     
     String link = await SecurePath.appendToken(PathsBuilder(Element.order).getElementPath());
     Uri uri = Uri.parse(link);

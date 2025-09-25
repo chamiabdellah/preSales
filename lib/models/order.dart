@@ -1,6 +1,7 @@
 
 import 'package:proj1/models/customer.dart';
 import 'package:proj1/models/order_line.dart';
+import 'package:proj1/models/seller.dart';
 
 class Order{
 
@@ -14,6 +15,7 @@ class Order{
   DateTime? deliveryDate;
   String? deliveryComment;
   String? orderNumber;
+  Seller? seller;
 
   Order.copy({
     required this.id,
@@ -26,6 +28,7 @@ class Order{
     required this.deliveryComment,
     required this.deliveryDate,
     required this.orderNumber,
+    this.seller,
 });
 
   Order({
@@ -33,6 +36,7 @@ class Order{
     required this.listOrderLines,
     this.totalCost = 0,
     this.totalDiscount = 0,
+    this.seller,
   });
 
   double calculateTotalCost(){
@@ -63,7 +67,8 @@ class Order{
       confirmationDate = DateTime.tryParse(json.value['confirmationDate']??""),
       deliveryDate = DateTime.tryParse(json.value['deliveryDate'] ?? ""),
       deliveryComment = json.value['deliveryComment'],
-      orderNumber = json.value['orderNumber'];
+      orderNumber = json.value['orderNumber'],
+      seller = json.value['seller'] != null ? Seller.fromJson(json.value['seller']) : null;
 
   Map<String, dynamic> toJson() => {
     'id' : id,
@@ -76,6 +81,7 @@ class Order{
     'deliveryDate' : deliveryDate.toString(),
     'deliveryComment' : deliveryComment,
     'orderNumber' : orderNumber,
+    'seller' : seller?.toJson(),
   };
 
   Order copyWith({
@@ -89,6 +95,7 @@ class Order{
     DateTime? deliveryDate,
     String? deliveryComment,
     String? orderNumber,
+    Seller? seller,
     }) => Order.copy(
       id: id ?? this.id,
       customer: customer ?? this.customer,
@@ -100,5 +107,6 @@ class Order{
       deliveryDate: deliveryDate ?? this.deliveryDate,
       deliveryComment: this.deliveryComment,
       orderNumber: this.orderNumber,
+      seller: seller ?? this.seller,
   );
 }

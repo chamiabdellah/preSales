@@ -4,6 +4,7 @@ import 'package:proj1/providers/list_of_sellers_provider.dart';
 import 'package:proj1/widgets/emptyListInfo.dart';
 import 'package:proj1/models/User.dart';
 import 'package:proj1/screens/manageSellers/addSellerScreen.dart';
+import 'package:proj1/screens/manageSellers/sellerOrdersScreen.dart';
 
 import '../../widgets/imageNetworkCached.dart';
 
@@ -77,6 +78,14 @@ class _ListOfSellersScreenState extends ConsumerState<ListOfSellersScreen> {
                         ),
                         title: Text(seller.name),
                         subtitle: Text(seller.email),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) => SellerOrdersScreen(seller: seller),
+                            ),
+                          );
+                        },
                         trailing: IconButton(
                           icon: const Icon(Icons.edit),
                           onPressed: () {

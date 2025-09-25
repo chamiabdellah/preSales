@@ -25,6 +25,7 @@ class AddCustomerScreen extends ConsumerStatefulWidget {
 class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
   final _customerFormKey = GlobalKey<FormState>();
   TextEditingController? customerNameController = TextEditingController();
+  TextEditingController? phoneNumberController = TextEditingController();
 
   double? latitude;
   double? longitude;
@@ -91,8 +92,11 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
         address: address!,
         latitude: latitude!,
         longitude: longitude!,
+        code: '${longitude};${latitude}:${customerNameController!.value.text}',
         name: customerNameController!.value.text,
         picture: imagePath,
+        phoneNumber: phoneNumberController!.value.text.isEmpty ? null : phoneNumberController!.value.text,
+        creationDate: DateTime.now(),
       );
       
        await ref.read(listOfCustomersProvider.notifier).addCustomer(customer);
@@ -145,6 +149,18 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                     labelText: "Nom du client",
                     controller: customerNameController,
                     validationFunc: ValidationLib.nonEmptyField,
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: OutlineTextField(
+                    labelText: "Numéro de téléphone",
+                    controller: phoneNumberController,
+                    textInputType: TextInputType.phone,
+                    validationFunc: null,
                   ),
                 ),
                 const SizedBox(

@@ -76,13 +76,7 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
   Future<String> addCustomerToDB(Customer customer) async {
     String link = await SecurePath.appendToken(Paths.customerPath);
     Uri uri = Uri.parse(link);
-    Map<String, dynamic> requestBody = {
-      'name': customer.name,
-      'address': customer.address,
-      'longitude' : customer.longitude,
-      'latitude' : customer.latitude,
-      'code': '${customer.longitude};${customer.latitude}:${customer.name}',
-    };
+    Map<String, dynamic> requestBody = customer.toJson();
     final response = await http.post(uri, body: json.encode(requestBody));
 
     if (response.statusCode == 200) {

@@ -22,9 +22,27 @@ class CustomerList extends ConsumerWidget {
         elevation: 5,
         child: ListTile(
           key: ValueKey(customer.id),
-          leading: const SizedBox(
-            width: 100,
-            child: Placeholder(),
+          leading: SizedBox(
+            width: 60,
+            height: 60,
+            child: customer.picture != null && customer.picture!.isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: Image.network(
+                      customer.picture!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return const CircleAvatar(
+                          radius: 30,
+                          child: Icon(Icons.person, size: 30),
+                        );
+                      },
+                    ),
+                  )
+                : const CircleAvatar(
+                    radius: 30,
+                    child: Icon(Icons.person, size: 30),
+                  ),
           ),
           title: Text(customer.name),
           subtitle: Text(customer.address),

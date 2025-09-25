@@ -1,4 +1,6 @@
 
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
@@ -9,6 +11,7 @@ import 'package:proj1/utils/LoadingIndicator.dart';
 import 'package:proj1/utils/ValidationLib.dart';
 import 'package:proj1/widgets/OutlineTextField.dart';
 import 'package:proj1/widgets/userCoordinates.dart';
+import 'package:proj1/widgets/PickImageCamera.dart';
 
 import '../../models/customer.dart';
 
@@ -26,6 +29,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
   double? latitude;
   double? longitude;
   String? address;
+  File? _customerImage;
 
   void getAddressFromLocation(Position position) async {
 
@@ -58,16 +62,39 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
 
   }
 
-  void addCustomer() async {
-    final Customer customer = Customer(
-      address: address!,
-      latitude: latitude!,
-      longitude: longitude!,
-      name: customerNameController!.value.text,
-    );
+  void setCustomerImage(File imageFile) {
+    setState(() {
+      _customerImage = imageFile;
+    });
+  }
 
+  Future<String?> uploadImage() async {
+    if (_customerImage == null) return null;
+    final storageRef = FirebaseStorage.instance
+        .ref()
+        .child('customer_images')
+        .child('${customerNameController!.value.text}_${DateTime.now().millisecondsSinceEpoch}.jpeg');
+    await storageRef.putFile(_customerImage!);
+    return await storageRef.getDownloadURL();
+  }
+
+  void addCustomer() async {
     if(_customerFormKey.currentState!.validate()){
       LoadingIndicator.showLoadingIndicator(context, "Ajout du client");
+      
+      String? imagePath;
+      if (_customerImage != null) {
+        imagePath = await uploadImage();
+      }
+      
+      final Customer customer = Customer(
+        address: address!,
+        latitude: latitude!,
+        longitude: longitude!,
+        name: customerNameController!.value.text,
+        picture: imagePath,
+      );
+      
        await ref.read(listOfCustomersProvider.notifier).addCustomer(customer);
        if(mounted) {
          LoadingIndicator.hideLoadingIndicator(context);
@@ -119,6 +146,12 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                     controller: customerNameController,
                     validationFunc: ValidationLib.nonEmptyField,
                   ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                PickImageCamera(
+                  onPick: setCustomerImage,
                 ),
                 const SizedBox(
                   height: 30,

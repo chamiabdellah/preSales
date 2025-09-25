@@ -7,6 +7,7 @@ class Customer{
   String code;
   String? id;
   String address;
+  String? picture;
 
   Customer({
     required this.name,
@@ -15,6 +16,7 @@ class Customer{
     this.id,
     this.code = '',
     required this.address,
+    this.picture,
   });
 
   Customer.fromJson(MapEntry<String, dynamic> json):
@@ -23,7 +25,8 @@ class Customer{
     address = json.value['address'],
     longitude = json.value['longitude'].toDouble(),
     latitude = json.value['latitude'].toDouble(),
-    code = json.value['code'];
+    code = json.value['code'],
+    picture = json.value['picture'];
 
   Map toJson() => {
     'name': name,
@@ -31,5 +34,6 @@ class Customer{
     'longitude' : longitude,
     'latitude' : latitude,
     'code': '$longitude;$latitude:$name',
+    'picture': picture,
   };
 }

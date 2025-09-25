@@ -27,6 +27,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
   TextEditingController? customerNameController = TextEditingController();
   TextEditingController? phoneNumberController = TextEditingController();
   TextEditingController? managerNameController = TextEditingController();
+  TextEditingController? addressController = TextEditingController();
 
   double? latitude;
   double? longitude;
@@ -41,6 +42,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
 
     setState(() {
       address = "${placemark.locality}, ${placemark.administrativeArea} ${placemark.subAdministrativeArea}, ${placemark.name}, ${placemark.postalCode}";
+      addressController!.text = address!;
     });
   }
 
@@ -126,7 +128,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
       }
       
       final Customer customer = Customer(
-        address: address!,
+        address: addressController!.text,
         latitude: latitude!,
         longitude: longitude!,
         code: '${longitude};${latitude}:${customerNameController!.value.text}',
@@ -227,6 +229,22 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                     controller: phoneNumberController,
                     textInputType: TextInputType.phone,
                     validationFunc: validatePhoneNumber,
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: TextFormField(
+                    controller: addressController,
+                    decoration: const InputDecoration(
+                      labelText: "Adresse",
+                      border: UnderlineInputBorder(),
+                    ),
+                    validator: ValidationLib.nonEmptyField,
+                    maxLines: 2,
+                    keyboardType: TextInputType.multiline,
                   ),
                 ),
                 const SizedBox(

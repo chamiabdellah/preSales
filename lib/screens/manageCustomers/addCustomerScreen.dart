@@ -69,6 +69,16 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
     });
   }
 
+  String? validatePhoneNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Numéro de téléphone requis';
+    }
+    if (!RegExp(r'^0\d{9}$').hasMatch(value)) {
+      return 'Le numéro doit contenir 10 chiffres et commencer par \'0\'';
+    }
+    return null;
+  }
+
   Future<String?> uploadImage() async {
     if (_customerImage == null) return null;
     final storageRef = FirebaseStorage.instance
@@ -160,7 +170,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                     labelText: "Numéro de téléphone",
                     controller: phoneNumberController,
                     textInputType: TextInputType.phone,
-                    validationFunc: null,
+                    validationFunc: validatePhoneNumber,
                   ),
                 ),
                 const SizedBox(

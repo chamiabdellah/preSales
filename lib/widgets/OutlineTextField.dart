@@ -31,6 +31,7 @@ class _OutlineTextFieldState extends State<OutlineTextField> {
         labelText: widget.labelText,
         border: const UnderlineInputBorder(),
         enabled: widget.isEnabled,
+        errorMaxLines: 3,
       ),
       validator: widget.validationFunc,
       controller: widget.controller,

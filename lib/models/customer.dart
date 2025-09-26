@@ -8,6 +8,7 @@ class Customer{
   String? id;
   String address;
   String? city;
+  String? region;
   String? picture;
   String? phoneNumber;
   DateTime? creationDate;
@@ -21,6 +22,7 @@ class Customer{
     this.code = '',
     required this.address,
     this.city,
+    this.region,
     this.picture,
     this.phoneNumber,
     this.creationDate,
@@ -32,6 +34,7 @@ class Customer{
     name = json.value['name'],
     address = json.value['address'],
     city = json.value['city'],
+    region = json.value['region'],
     longitude = json.value['longitude'].toDouble(),
     latitude = json.value['latitude'].toDouble(),
     code = json.value['code'],
@@ -44,6 +47,7 @@ class Customer{
     'name': name,
     'address': address,
     'city': city,
+    'region': region,
     'longitude' : longitude,
     'latitude' : latitude,
     'code': '$longitude;$latitude:$name',

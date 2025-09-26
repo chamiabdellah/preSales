@@ -29,6 +29,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
   TextEditingController? managerNameController = TextEditingController();
   TextEditingController? addressController = TextEditingController();
   TextEditingController? cityController = TextEditingController();
+  TextEditingController? regionController = TextEditingController();
 
   double? latitude;
   double? longitude;
@@ -46,6 +47,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
       address = "${placemark.locality}, ${placemark.administrativeArea} ${placemark.subAdministrativeArea}, ${placemark.name}, ${placemark.postalCode}";
       addressController!.text = address!;
       cityController!.text = placemark.locality ?? '';
+      regionController!.text = placemark.administrativeArea ?? '';
     });
   }
 
@@ -149,6 +151,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
       final Customer customer = Customer(
         address: addressController!.text,
         city: cityController!.text,
+        region: regionController!.text,
         latitude: latitude!,
         longitude: longitude!,
         code: '${longitude};${latitude}:${customerNameController!.value.text}',
@@ -283,24 +286,52 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: TextFormField(
-                    controller: cityController,
-                    decoration: InputDecoration(
-                      labelText: "Ville",
-                      border: UnderlineInputBorder(),
-                      suffixIcon: _isLoadingLocation
-                          ? const Padding(
-                        padding: EdgeInsets.all(12.0),
-                        child: SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: cityController,
+                          decoration: InputDecoration(
+                            labelText: "Ville",
+                            border: const UnderlineInputBorder(),
+                            suffixIcon: _isLoadingLocation
+                                ? const Padding(
+                                    padding: EdgeInsets.all(12.0),
+                                    child: SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(strokeWidth: 2),
+                                    ),
+                                  )
+                                : null,
+                          ),
+                          validator: ValidationLib.nonEmptyField,
+                          enabled: !_isLoadingLocation,
                         ),
-                      )
-                          : null,
-                    ),
-                    validator: ValidationLib.nonEmptyField,
-                    enabled: !_isLoadingLocation,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: TextFormField(
+                          controller: regionController,
+                          decoration: InputDecoration(
+                            labelText: "Région",
+                            border: const UnderlineInputBorder(),
+                            suffixIcon: _isLoadingLocation
+                                ? const Padding(
+                                    padding: EdgeInsets.all(12.0),
+                                    child: SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(strokeWidth: 2),
+                                    ),
+                                  )
+                                : null,
+                          ),
+                          validator: ValidationLib.nonEmptyField,
+                          enabled: !_isLoadingLocation,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(

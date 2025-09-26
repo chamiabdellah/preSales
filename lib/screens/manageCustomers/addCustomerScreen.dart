@@ -34,6 +34,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
   String? address;
   File? _customerImage;
   bool _useClientNameAsManager = true;
+  bool _isLoadingLocation = false;
 
   void getAddressFromLocation(Position position) async {
 
@@ -47,24 +48,34 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
   }
 
   void _getUserLocation() async {
+    setState(() {
+      _isLoadingLocation = true;
+    });
 
     try{
       if(!mounted) return;
       Position? currentPosition = await GeoUtil.getUserLocation(context);
-      if(currentPosition == null) return ;
+      if(currentPosition == null) {
+        setState(() {
+          _isLoadingLocation = false;
+        });
+        return;
+      }
 
       getAddressFromLocation(currentPosition);
 
       setState(() {
         latitude = currentPosition.latitude;
         longitude = currentPosition.longitude;
+        _isLoadingLocation = false;
         placemarkFromCoordinates(latitude!, longitude!);
       });
     } catch(e){
-      // add an error message when failed.
+      setState(() {
+        _isLoadingLocation = false;
+      });
       return;
     }
-
   }
 
   @override
@@ -244,13 +255,24 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: TextFormField(
                     controller: addressController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: "Adresse",
-                      border: UnderlineInputBorder(),
+                      border: const UnderlineInputBorder(),
+                      suffixIcon: _isLoadingLocation
+                          ? const Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                            )
+                          : null,
                     ),
                     validator: ValidationLib.nonEmptyField,
                     maxLines: 2,
                     keyboardType: TextInputType.multiline,
+                    enabled: !_isLoadingLocation,
                   ),
                 ),
                 const SizedBox(

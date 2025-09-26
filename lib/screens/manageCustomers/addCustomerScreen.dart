@@ -188,20 +188,8 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                InkWell(
-                  onTap: _getUserLocation,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      border: Border(bottom: BorderSide(width: 1)),
-                      color: Colors.white54,
-                    ),
-                    height: 200,
-                    width: double.infinity,
-                    child: const Icon(
-                      Icons.location_on_outlined,
-                      size: 100,
-                    ),
-                  ),
+                PickImageCamera(
+                  onPick: setCustomerImage,
                 ),
                 const SizedBox(
                   height: 30,
@@ -335,10 +323,18 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 20,
                 ),
-                PickImageCamera(
-                  onPick: setCustomerImage,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: ElevatedButton.icon(
+                    onPressed: _getUserLocation,
+                    icon: const Icon(Icons.location_on),
+                    label: const Text("Obtenir la localisation"),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 45),
+                    ),
+                  ),
                 ),
                 const SizedBox(
                   height: 30,

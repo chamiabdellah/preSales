@@ -28,6 +28,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
   TextEditingController? phoneNumberController = TextEditingController();
   TextEditingController? managerNameController = TextEditingController();
   TextEditingController? addressController = TextEditingController();
+  TextEditingController? cityController = TextEditingController();
 
   double? latitude;
   double? longitude;
@@ -44,6 +45,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
     setState(() {
       address = "${placemark.locality}, ${placemark.administrativeArea} ${placemark.subAdministrativeArea}, ${placemark.name}, ${placemark.postalCode}";
       addressController!.text = address!;
+      cityController!.text = placemark.locality ?? '';
     });
   }
 
@@ -146,6 +148,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
       
       final Customer customer = Customer(
         address: addressController!.text,
+        city: cityController!.text,
         latitude: latitude!,
         longitude: longitude!,
         code: '${longitude};${latitude}:${customerNameController!.value.text}',
@@ -272,6 +275,31 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                     validator: ValidationLib.nonEmptyField,
                     maxLines: 2,
                     keyboardType: TextInputType.multiline,
+                    enabled: !_isLoadingLocation,
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: TextFormField(
+                    controller: cityController,
+                    decoration: InputDecoration(
+                      labelText: "Ville",
+                      border: UnderlineInputBorder(),
+                      suffixIcon: _isLoadingLocation
+                          ? const Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      )
+                          : null,
+                    ),
+                    validator: ValidationLib.nonEmptyField,
                     enabled: !_isLoadingLocation,
                   ),
                 ),

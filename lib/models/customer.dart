@@ -7,6 +7,7 @@ class Customer{
   String code;
   String? id;
   String address;
+  String? city;
   String? picture;
   String? phoneNumber;
   DateTime? creationDate;
@@ -19,6 +20,7 @@ class Customer{
     this.id,
     this.code = '',
     required this.address,
+    this.city,
     this.picture,
     this.phoneNumber,
     this.creationDate,
@@ -29,6 +31,7 @@ class Customer{
     id = json.key,
     name = json.value['name'],
     address = json.value['address'],
+    city = json.value['city'],
     longitude = json.value['longitude'].toDouble(),
     latitude = json.value['latitude'].toDouble(),
     code = json.value['code'],
@@ -40,6 +43,7 @@ class Customer{
   Map<String,dynamic> toJson() => {
     'name': name,
     'address': address,
+    'city': city,
     'longitude' : longitude,
     'latitude' : latitude,
     'code': '$longitude;$latitude:$name',

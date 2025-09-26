@@ -67,6 +67,12 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
 
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _getUserLocation();
+  }
+
   void setCustomerImage(File imageFile) {
     setState(() {
       _customerImage = imageFile;

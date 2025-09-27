@@ -190,7 +190,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
       
        if(mounted) {
          LoadingIndicator.hideLoadingIndicator(context);
-         Navigator.of(context).pop();
+         Navigator.of(context).pop(widget.editCustomer != null ? customer : null);
          final snackBar = SnackBar(
            duration: const Duration(seconds: 5),
            content: Text(

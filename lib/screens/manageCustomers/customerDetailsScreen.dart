@@ -6,6 +6,7 @@ import 'package:proj1/screens/manageCustomers/addCustomerScreen.dart';
 import 'package:proj1/utils/DialogMessagesLib.dart';
 import 'package:proj1/utils/LoadingIndicator.dart';
 import 'package:proj1/widgets/AddressCardWithMaps.dart';
+import 'package:proj1/widgets/PhoneCardWithActions.dart';
 
 class CustomerDetailsScreen extends ConsumerStatefulWidget {
   const CustomerDetailsScreen({Key? key, required this.customer}) : super(key: key);
@@ -88,7 +89,10 @@ class _CustomerDetailsScreenState extends ConsumerState<CustomerDetailsScreen> {
                   _buildDetailCard("Nom du gérant", currentCustomer.managerName ?? "Non spécifié"),
                   const SizedBox(height: 16),
                   if (currentCustomer.phoneNumber != null)
-                    _buildDetailCard("Numéro de téléphone", currentCustomer.phoneNumber!),
+                    PhoneCardWithActions(
+                      label: "Numéro de téléphone",
+                      phoneNumber: currentCustomer.phoneNumber!,
+                    ),
                   if (currentCustomer.phoneNumber != null) const SizedBox(height: 16),
                   AddressCardWithMaps(
                     label: "Adresse",

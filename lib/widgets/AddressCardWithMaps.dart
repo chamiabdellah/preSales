@@ -50,14 +50,20 @@ class AddressCardWithMaps extends StatelessWidget {
             ),
           ),
           if (latitude != null && longitude != null)
-            ElevatedButton.icon(
+            ElevatedButton(
               onPressed: () => _openInMaps(context),
-              icon: const Icon(Icons.map, size: 18),
-              label: const Text("Cartes"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              ),
+              child: const Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.map, size: 16),
+                  SizedBox(height: 2),
+                  Text("Cartes", style: TextStyle(fontSize: 12)),
+                ],
               ),
             ),
         ],

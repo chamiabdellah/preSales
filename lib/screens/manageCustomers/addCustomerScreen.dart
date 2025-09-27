@@ -10,8 +10,7 @@ import 'package:proj1/utils/GeoUtils.dart';
 import 'package:proj1/utils/LoadingIndicator.dart';
 import 'package:proj1/utils/ValidationLib.dart';
 import 'package:proj1/widgets/OutlineTextField.dart';
-import 'package:proj1/widgets/userCoordinates.dart';
-import 'package:proj1/widgets/PickImageCamera.dart';
+import 'package:proj1/widgets/PickOrTakeImage.dart';
 
 import '../../models/customer.dart';
 
@@ -188,8 +187,9 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                PickImageCamera(
+                PickOrTakeImage(
                   onPick: setCustomerImage,
+                  image: _customerImage,
                 ),
                 const SizedBox(
                   height: 30,
@@ -354,17 +354,6 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                     ),
                   ),
                 ),
-                //const Expanded(child: SizedBox()),
-                 Flexible(
-                   child: Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: UserCoordinates(
-                      longitude: longitude,
-                      latitude: latitude,
-                      address: address,
-                    ),
-                ),
-                 ),
               ],
             ),
           ),

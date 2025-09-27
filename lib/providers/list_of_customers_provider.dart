@@ -36,6 +36,16 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
     addCustomerUI(customer);
   }
 
+  Future<void> updateCustomer(Customer customer) async {
+    try {
+      await updateCustomerDB(customer);
+      deleteCustomerUI(customer.id!);
+      addCustomerUI(customer);
+    } catch (e) {
+      throw Exception('Impossible de modifier le client ${customer.name}');
+    }
+  }
+
   void deleteCustomerUI(String id) {
     state = state.where((element) => element.id != id).toList();
   }
@@ -77,6 +87,17 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
       return extractedData['name'];
     } else {
       throw Exception('Failed to load data');
+    }
+  }
+
+  Future<void> updateCustomerDB(Customer customer) async {
+    String link = await SecurePath.appendToken(Paths.getCustomerPathWithId(customer.id!));
+    Uri uri = Uri.parse(link);
+    Map<String, dynamic> requestBody = customer.toJson();
+    final response = await http.put(uri, body: json.encode(requestBody));
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update customer');
     }
   }
 

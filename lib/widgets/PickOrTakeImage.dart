@@ -7,10 +7,12 @@ class PickOrTakeImage extends StatelessWidget {
     Key? key,
     required this.onPick,
     this.image,
+    this.initialImageUrl,
   }) : super(key: key);
 
   final void Function(File) onPick;
   final File? image;
+  final String? initialImageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +33,24 @@ class PickOrTakeImage extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 )
-              : const Center(
-                  child: Icon(
-                    Icons.person,
-                    size: 80,
-                    color: Colors.grey,
-                  ),
-                ),
+              : initialImageUrl != null
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        initialImageUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => const Center(
+                          child: Icon(Icons.person, size: 80, color: Colors.grey),
+                        ),
+                      ),
+                    )
+                  : const Center(
+                      child: Icon(
+                        Icons.person,
+                        size: 80,
+                        color: Colors.grey,
+                      ),
+                    ),
         ),
         Positioned(
           bottom: 8,
@@ -88,7 +101,7 @@ class PickOrTakeImage extends StatelessWidget {
                 );
               },
               icon: Icon(
-                image != null ? Icons.edit : Icons.camera_alt,
+                (image != null || initialImageUrl != null) ? Icons.edit : Icons.camera_alt,
                 color: Colors.white,
               ),
             ),

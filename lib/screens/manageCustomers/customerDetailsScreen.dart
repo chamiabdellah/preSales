@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proj1/models/customer.dart';
+import 'package:proj1/screens/manageCustomers/addCustomerScreen.dart';
 
 class CustomerDetailsScreen extends StatelessWidget {
   const CustomerDetailsScreen({Key? key, required this.customer}) : super(key: key);
@@ -11,6 +12,19 @@ class CustomerDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(customer.name),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddCustomerScreen(editCustomer: customer),
+                ),
+              );
+            },
+            icon: const Icon(Icons.edit),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

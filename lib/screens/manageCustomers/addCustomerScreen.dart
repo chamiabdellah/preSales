@@ -15,7 +15,9 @@ import 'package:proj1/widgets/PickOrTakeImage.dart';
 import '../../models/customer.dart';
 
 class AddCustomerScreen extends ConsumerStatefulWidget {
-  const AddCustomerScreen({Key? key}) : super(key: key);
+  const AddCustomerScreen({Key? key, this.editCustomer}) : super(key: key);
+  
+  final Customer? editCustomer;
 
   @override
   ConsumerState<AddCustomerScreen> createState() => _AddCustomerScreenState();
@@ -84,7 +86,25 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
   @override
   void initState() {
     super.initState();
-    _getUserLocation();
+    if (widget.editCustomer != null) {
+      _loadCustomerData();
+    } else {
+      _getUserLocation();
+    }
+  }
+  
+  void _loadCustomerData() {
+    final customer = widget.editCustomer!;
+    customerNameController!.text = customer.name;
+    phoneNumberController!.text = customer.phoneNumber ?? '';
+    managerNameController!.text = customer.managerName ?? '';
+    addressController!.text = customer.address;
+    cityController!.text = customer.city ?? '';
+    regionController!.text = customer.region ?? '';
+    latitude = customer.latitude;
+    longitude = customer.longitude;
+    address = customer.address;
+    _useClientNameAsManager = customer.managerName == customer.name;
   }
 
   void setCustomerImage(File imageFile) {
@@ -140,7 +160,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
         return;
       }
       
-      LoadingIndicator.showLoadingIndicator(context, "Ajout du client");
+      LoadingIndicator.showLoadingIndicator(context, widget.editCustomer != null ? "Modification du client" : "Ajout du client");
       
       String? imagePath;
       if (_customerImage != null) {
@@ -148,6 +168,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
       }
       
       final Customer customer = Customer(
+        id: widget.editCustomer?.id,
         address: addressController!.text,
         city: cityController!.text,
         region: regionController!.text,
@@ -155,20 +176,27 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
         longitude: longitude!,
         code: '${longitude};${latitude}:${customerNameController!.value.text}',
         name: customerNameController!.value.text,
-        picture: imagePath,
+        picture: imagePath ?? widget.editCustomer?.picture,
         phoneNumber: phoneNumberController!.value.text.isEmpty ? null : phoneNumberController!.value.text,
-        creationDate: DateTime.now(),
+        creationDate: widget.editCustomer?.creationDate ?? DateTime.now(),
         managerName: managerNameController!.value.text,
       );
       
-       await ref.read(listOfCustomersProvider.notifier).addCustomer(customer);
+      if (widget.editCustomer != null) {
+        await ref.read(listOfCustomersProvider.notifier).updateCustomer(customer);
+      } else {
+        await ref.read(listOfCustomersProvider.notifier).addCustomer(customer);
+      }
+      
        if(mounted) {
          LoadingIndicator.hideLoadingIndicator(context);
          Navigator.of(context).pop();
          final snackBar = SnackBar(
            duration: const Duration(seconds: 5),
            content: Text(
-               'Le client ${customer.name} a été ajouté avec succès'),
+               widget.editCustomer != null 
+                 ? 'Le client ${customer.name} a été modifié avec succès'
+                 : 'Le client ${customer.name} a été ajouté avec succès'),
          );
          ScaffoldMessenger.of(context).showSnackBar(snackBar);
        }
@@ -179,7 +207,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Ajouter un client"),
+          title: Text(widget.editCustomer != null ? "Modifier le client" : "Ajouter un client"),
         ),
         body: SingleChildScrollView(
           child: Form(
@@ -190,6 +218,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                 PickOrTakeImage(
                   onPick: setCustomerImage,
                   image: _customerImage,
+                  initialImageUrl: widget.editCustomer?.picture,
                 ),
                 const SizedBox(
                   height: 30,
@@ -204,6 +233,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                     ),
                     validator: ValidationLib.nonEmptyField,
                     onChanged: (value) => _onClientNameChanged(),
+                    enabled: widget.editCustomer == null,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -346,8 +376,8 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                     height: 60,
                     child: ElevatedButton(
                       onPressed: addCustomer,
-                      child: const Text(
-                        "Ajouter",
+                      child: Text(
+                        widget.editCustomer != null ? "Sauvegarder" : "Ajouter",
                         style:
                             TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                       ),

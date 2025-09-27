@@ -55,10 +55,6 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
     addCustomer(newCustomer);
   }
 
-  Customer getCustomerByCode(String code) {
-    return state.firstWhere((element) => element.code == code);
-  }
-
   Future<void> initListFromDb() async {
     String link = await SecurePath.appendToken(Paths.customerPath);
     Uri uri = Uri.parse(link);

@@ -4,7 +4,6 @@ class Customer{
   double longitude;
   double latitude;
   String name;
-  String code;
   String? id;
   String address;
   String? city;
@@ -19,7 +18,6 @@ class Customer{
     required this.longitude,
     required this.latitude,
     this.id,
-    this.code = '',
     required this.address,
     this.city,
     this.region,
@@ -37,7 +35,6 @@ class Customer{
     region = json.value['region'],
     longitude = json.value['longitude'].toDouble(),
     latitude = json.value['latitude'].toDouble(),
-    code = json.value['code'],
     picture = json.value['picture'],
     phoneNumber = json.value['phoneNumber'],
     creationDate = DateTime.tryParse(json.value['creationDate'] ?? ""),
@@ -50,7 +47,6 @@ class Customer{
     'region': region,
     'longitude' : longitude,
     'latitude' : latitude,
-    'code': '$longitude;$latitude:$name',
     'picture': picture,
     'phoneNumber': phoneNumber,
     'creationDate': creationDate?.toString(),

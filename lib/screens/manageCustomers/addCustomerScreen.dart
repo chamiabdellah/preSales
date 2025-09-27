@@ -174,7 +174,6 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
         region: regionController!.text,
         latitude: latitude!,
         longitude: longitude!,
-        code: '${longitude};${latitude}:${customerNameController!.value.text}',
         name: customerNameController!.value.text,
         picture: imagePath ?? widget.editCustomer?.picture,
         phoneNumber: phoneNumberController!.value.text.isEmpty ? null : phoneNumberController!.value.text,

@@ -5,12 +5,20 @@ import 'package:http/http.dart' as http;
 import 'package:proj1/utils/SecurePath.dart';
 import '../utils/Paths.dart';
 
-class SellerOrdersNotifier extends StateNotifier<List<Order>> {
-  SellerOrdersNotifier() : super([]);
+class FilteredOrdersNotifier extends StateNotifier<List<Order>> {
+  FilteredOrdersNotifier() : super([]);
 
   Future<void> fetchOrdersBySeller(String sellerId) async {
+    await _fetchOrdersByField('seller/id', sellerId);
+  }
+
+  Future<void> fetchOrderByCustomer(String customerId) async {
+    await _fetchOrdersByField('customer/id', customerId);
+  }
+
+  Future<void> _fetchOrdersByField(String field, String value) async {
     try {
-      String link = await SecurePath.appendToken('${PathsBuilder(Element.order).getElementPath()}?orderBy="seller/id"&equalTo="$sellerId"');
+      String link = await SecurePath.appendToken('${PathsBuilder(Element.order).getElementPath()}?orderBy="$field"&equalTo="$value"');
       Uri uri = Uri.parse(link);
       final response = await http.get(uri);
       
@@ -34,6 +42,6 @@ class SellerOrdersNotifier extends StateNotifier<List<Order>> {
   }
 }
 
-final sellerOrdersProvider = StateNotifierProvider<SellerOrdersNotifier, List<Order>>((ref) {
-  return SellerOrdersNotifier();
+final filteredOrdersProvider = StateNotifierProvider<FilteredOrdersNotifier, List<Order>>((ref) {
+  return FilteredOrdersNotifier();
 });

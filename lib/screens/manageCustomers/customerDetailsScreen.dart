@@ -4,6 +4,7 @@ import 'package:proj1/models/customer.dart';
 import 'package:proj1/providers/list_of_customers_provider.dart';
 import 'package:proj1/screens/manageCustomers/addCustomerScreen.dart';
 import 'package:proj1/utils/DialogMessagesLib.dart';
+import 'package:proj1/utils/LoadingIndicator.dart';
 
 class CustomerDetailsScreen extends ConsumerStatefulWidget {
   const CustomerDetailsScreen({Key? key, required this.customer}) : super(key: key);
@@ -174,9 +175,11 @@ class _CustomerDetailsScreenState extends ConsumerState<CustomerDetailsScreen> {
     );
     
     if (confirmed == true) {
+      LoadingIndicator.showLoadingIndicator(context, "Suppression du client");
       try {
-        await ref.read(listOfCustomersProvider.notifier).deleteCustomer(currentCustomer);
+        ref.read(listOfCustomersProvider.notifier).deleteCustomer(currentCustomer);
         if (mounted) {
+          LoadingIndicator.hideLoadingIndicator(context);
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -187,6 +190,7 @@ class _CustomerDetailsScreenState extends ConsumerState<CustomerDetailsScreen> {
         }
       } catch (e) {
         if (mounted) {
+          LoadingIndicator.hideLoadingIndicator(context);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Erreur lors de la suppression: $e'),

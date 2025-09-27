@@ -15,7 +15,7 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
 
     deleteCustomerUI(customer.id!);
     try{
-      deleteCustomerDB(customer.id!);
+      await deleteCustomerDB(customer.id!);
     } catch(e){
       addCustomerUI(customer);
     }
@@ -97,7 +97,7 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
     }
   }
 
-  void deleteCustomerDB(String id) async {
+  Future<void> deleteCustomerDB(String id) async {
     String link = await SecurePath.appendToken(Paths.getCustomerPathWithId(id));
     Uri uri = Uri.parse(link);
     final response = await http.delete(uri);

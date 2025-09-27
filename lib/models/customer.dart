@@ -51,5 +51,6 @@ class Customer{
     'phoneNumber': phoneNumber,
     'creationDate': creationDate?.toString(),
     'managerName': managerName,
+    'id': id,
   };
 }

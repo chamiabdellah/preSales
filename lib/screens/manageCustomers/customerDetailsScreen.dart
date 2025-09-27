@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/models/customer.dart';
+import 'package:proj1/providers/list_of_customers_provider.dart';
 import 'package:proj1/screens/manageCustomers/addCustomerScreen.dart';
+import 'package:proj1/utils/DialogMessagesLib.dart';
 
-class CustomerDetailsScreen extends StatefulWidget {
+class CustomerDetailsScreen extends ConsumerStatefulWidget {
   const CustomerDetailsScreen({Key? key, required this.customer}) : super(key: key);
 
   final Customer customer;
 
   @override
-  State<CustomerDetailsScreen> createState() => _CustomerDetailsScreenState();
+  ConsumerState<CustomerDetailsScreen> createState() => _CustomerDetailsScreenState();
 }
 
-class _CustomerDetailsScreenState extends State<CustomerDetailsScreen> {
+class _CustomerDetailsScreenState extends ConsumerState<CustomerDetailsScreen> {
   late Customer currentCustomer;
 
   @override
@@ -102,6 +105,24 @@ class _CustomerDetailsScreenState extends State<CustomerDetailsScreen> {
                     ],
                   ),
                   const SizedBox(height: 30),
+                  
+                  // Delete Button
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: _deleteCustomer,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red.shade300,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text(
+                        "Supprimer le client",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -141,5 +162,39 @@ class _CustomerDetailsScreenState extends State<CustomerDetailsScreen> {
         ],
       ),
     );
+  }
+  
+  void _deleteCustomer() async {
+    final confirmed = await DialogMessagesLib.showConfirmationDialog(
+      context: context,
+      title: 'Confirmer la suppression',
+      content: 'Êtes-vous sûr de vouloir supprimer le client "${currentCustomer.name}" ?',
+      confirmText: 'Supprimer',
+      confirmColor: Colors.red,
+    );
+    
+    if (confirmed == true) {
+      try {
+        await ref.read(listOfCustomersProvider.notifier).deleteCustomer(currentCustomer);
+        if (mounted) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Le client "${currentCustomer.name}" a été supprimé avec succès'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Erreur lors de la suppression: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
   }
 }

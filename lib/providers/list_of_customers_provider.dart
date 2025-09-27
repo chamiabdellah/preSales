@@ -11,7 +11,7 @@ import '../utils/Paths.dart';
 class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
   ListOfCustomersNotifier() : super([]);
 
-  void deleteCustomer(Customer customer) async {
+  Future<void> deleteCustomer(Customer customer) async {
 
     deleteCustomerUI(customer.id!);
     try{

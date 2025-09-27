@@ -29,14 +29,14 @@ class _MutableMenuItemState extends ConsumerState<MutableMenuItem> {
     if(numberOfLines > 0) {
       DialogMessagesLib.showSimpleAlert(
         context,
+        'Commande en cours',
         'Vous devez valider ou annuler la commande en cours avant de créer une nouvelle'
-    );
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final numberOfLines = ref.watch(orderProvider)?.listOrderLines.length ?? 0;
 
     return MenuItem(
       title: "Créer une commande",

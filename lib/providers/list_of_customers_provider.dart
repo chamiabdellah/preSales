@@ -58,14 +58,7 @@ class ListOfCustomersNotifier extends StateNotifier<List<Customer>> {
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Customer> loadedItems = [];
       extractedData.forEach((key, value) {
-        loadedItems.add(Customer(
-          address: value['address'],
-          code: value['code'],
-          longitude: value['longitude'],
-          latitude: value['latitude'],
-          name: value['name'],
-          id: key,
-        ));
+        loadedItems.add(Customer.fromJson(MapEntry(key, value)));
       });
       state = loadedItems;
     } else {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proj1/providers/list_of_customers_provider.dart';
 import 'package:proj1/screens/manageCustomers/addCustomerScreen.dart';
+import 'package:proj1/screens/manageCustomers/customerDetailsScreen.dart';
 import 'package:proj1/widgets/customerList.dart';
 import 'package:proj1/widgets/emptyListInfo.dart';
 
@@ -74,7 +75,12 @@ class _ListOfCustomersScreenState extends ConsumerState<ListOfCustomersScreen> {
             customer: listCustomers[index],
             showDeleteButton: true,
             onDelete: () => ref.read(listOfCustomersProvider.notifier).deleteCustomer(listCustomers[index]),
-            onClick: null,
+            onClick: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CustomerDetailsScreen(customer: listCustomers[index]),
+              ),
+            ),
           );
         },
       ),

@@ -26,6 +26,8 @@ class AddressCardWithMaps extends StatelessWidget {
       ),
       child: Row(
         children: [
+          Icon(Icons.location_on, size: 20, color: Colors.grey.shade600),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

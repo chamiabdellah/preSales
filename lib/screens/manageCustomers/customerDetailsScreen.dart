@@ -84,9 +84,9 @@ class _CustomerDetailsScreenState extends ConsumerState<CustomerDetailsScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
-                  _buildDetailCard("Nom du client", currentCustomer.name),
+                  _buildDetailCard("Nom du client", currentCustomer.name, Icons.person),
                   const SizedBox(height: 16),
-                  _buildDetailCard("Nom du gérant", currentCustomer.managerName ?? "Non spécifié"),
+                  _buildDetailCard("Nom du gérant", currentCustomer.managerName ?? "Non spécifié", Icons.manage_accounts),
                   const SizedBox(height: 16),
                   if (currentCustomer.phoneNumber != null)
                     PhoneCardWithActions(
@@ -105,13 +105,13 @@ class _CustomerDetailsScreenState extends ConsumerState<CustomerDetailsScreen> {
                     children: [
                       if (currentCustomer.city != null)
                         Expanded(
-                          child: _buildDetailCard("Ville", currentCustomer.city!),
+                          child: _buildDetailCard("Ville", currentCustomer.city!, Icons.location_city),
                         ),
                       if (currentCustomer.city != null && currentCustomer.region != null)
                         const SizedBox(width: 16),
                       if (currentCustomer.region != null)
                         Expanded(
-                          child: _buildDetailCard("Région", currentCustomer.region!),
+                          child: _buildDetailCard("Région", currentCustomer.region!, Icons.map),
                         ),
                     ],
                   ),
@@ -143,7 +143,7 @@ class _CustomerDetailsScreenState extends ConsumerState<CustomerDetailsScreen> {
     );
   }
 
-  Widget _buildDetailCard(String label, String value) {
+  Widget _buildDetailCard(String label, String value, IconData icon) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -151,23 +151,31 @@ class _CustomerDetailsScreenState extends ConsumerState<CustomerDetailsScreen> {
         border: Border.all(color: Colors.grey.shade300),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
+          Icon(icon, size: 20, color: Colors.grey.shade600),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

@@ -22,6 +22,8 @@ class PhoneCardWithActions extends StatelessWidget {
       ),
       child: Row(
         children: [
+          Icon(Icons.phone, size: 20, color: Colors.grey.shade600),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

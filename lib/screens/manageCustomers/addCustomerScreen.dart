@@ -229,6 +229,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                     decoration: const InputDecoration(
                       labelText: "Nom du client",
                       border: UnderlineInputBorder(),
+                      prefixIcon: Icon(Icons.person),
                     ),
                     validator: ValidationLib.nonEmptyField,
                     onChanged: (value) => _onClientNameChanged(),
@@ -257,6 +258,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                     controller: managerNameController,
                     validationFunc: ValidationLib.nonEmptyField,
                     isEnabled: !_useClientNameAsManager,
+                    prefixIcon: Icons.manage_accounts,
                   ),
                 ),
                 const SizedBox(
@@ -269,6 +271,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                     controller: phoneNumberController,
                     textInputType: TextInputType.phone,
                     validationFunc: validatePhoneNumber,
+                    prefixIcon: Icons.phone,
                   ),
                 ),
                 const SizedBox(
@@ -281,6 +284,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                     decoration: InputDecoration(
                       labelText: "Adresse",
                       border: const UnderlineInputBorder(),
+                      prefixIcon: const Icon(Icons.location_on),
                       suffixIcon: _isLoadingLocation
                           ? const Padding(
                               padding: EdgeInsets.all(12.0),
@@ -311,6 +315,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                           decoration: InputDecoration(
                             labelText: "Ville",
                             border: const UnderlineInputBorder(),
+                            prefixIcon: const Icon(Icons.location_city),
                             suffixIcon: _isLoadingLocation
                                 ? const Padding(
                                     padding: EdgeInsets.all(12.0),
@@ -333,6 +338,7 @@ class _AddCustomerScreenState extends ConsumerState<AddCustomerScreen> {
                           decoration: InputDecoration(
                             labelText: "Région",
                             border: const UnderlineInputBorder(),
+                            prefixIcon: const Icon(Icons.map),
                             suffixIcon: _isLoadingLocation
                                 ? const Padding(
                                     padding: EdgeInsets.all(12.0),

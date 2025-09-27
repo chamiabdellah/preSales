@@ -5,6 +5,7 @@ import 'package:proj1/providers/list_of_customers_provider.dart';
 import 'package:proj1/screens/manageCustomers/addCustomerScreen.dart';
 import 'package:proj1/utils/DialogMessagesLib.dart';
 import 'package:proj1/utils/LoadingIndicator.dart';
+import 'package:proj1/widgets/AddressCardWithMaps.dart';
 
 class CustomerDetailsScreen extends ConsumerStatefulWidget {
   const CustomerDetailsScreen({Key? key, required this.customer}) : super(key: key);
@@ -89,7 +90,12 @@ class _CustomerDetailsScreenState extends ConsumerState<CustomerDetailsScreen> {
                   if (currentCustomer.phoneNumber != null)
                     _buildDetailCard("Numéro de téléphone", currentCustomer.phoneNumber!),
                   if (currentCustomer.phoneNumber != null) const SizedBox(height: 16),
-                  _buildDetailCard("Adresse", currentCustomer.address),
+                  AddressCardWithMaps(
+                    label: "Adresse",
+                    address: currentCustomer.address,
+                    latitude: currentCustomer.latitude,
+                    longitude: currentCustomer.longitude,
+                  ),
                   const SizedBox(height: 16),
                   Row(
                     children: [
@@ -164,7 +170,8 @@ class _CustomerDetailsScreenState extends ConsumerState<CustomerDetailsScreen> {
       ),
     );
   }
-  
+
+
   void _deleteCustomer() async {
     final confirmed = await DialogMessagesLib.showConfirmationDialog(
       context: context,
